@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/shop-r1/sandpay/pay/params"
+	"github.com/mahongran/sandpay/pay/params"
 )
 
 func TestSandPay_OrderPay(t *testing.T) {

@@ -2,10 +2,10 @@ package sandpay
 
 import (
 	"fmt"
-	"github.com/shop-r1/sandpay/pay"
-	"github.com/shop-r1/sandpay/pay/params"
-	"github.com/shop-r1/sandpay/pay/request"
-	"github.com/shop-r1/sandpay/pay/response"
+	"github.com/mahongran/sandpay/pay"
+	"github.com/mahongran/sandpay/pay/params"
+	"github.com/mahongran/sandpay/pay/request"
+	"github.com/mahongran/sandpay/pay/response"
 	"net/url"
 	"strings"
 	"time"

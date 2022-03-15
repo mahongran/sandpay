@@ -1,10 +1,10 @@
 package sandpay
 
 import (
-	"github.com/shop-r1/sandpay/agent"
-	"github.com/shop-r1/sandpay/agent/params"
-	"github.com/shop-r1/sandpay/agent/request"
-	"github.com/shop-r1/sandpay/agent/response"
+	"github.com/mahongran/sandpay/agent"
+	"github.com/mahongran/sandpay/agent/params"
+	"github.com/mahongran/sandpay/agent/request"
+	"github.com/mahongran/sandpay/agent/response"
 	"log"
 	"time"
 )

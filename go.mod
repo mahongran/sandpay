@@ -1,4 +1,4 @@
-module github.com/shop-r1/sandpay
+module github.com/mahongran/sandpay
 
 go 1.13
 
