@@ -1,7 +1,7 @@
 # sandpay
 >  杉德支付 
   网银支付
-  代下单服务
+  代下单服务!
 
 ## 提供的pfx证书在golang中解析会失败 需要转为pem证书解析pfx转pem方法,需要安装openssl
   
