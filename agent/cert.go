@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"github.com/mahongran/sandpay/agent/utils"
 	"io/ioutil"
-	"log"
 	"net/url"
 	"strings"
 )
@@ -68,7 +67,7 @@ func LoadCertInfo(info *Config) (err error) {
 	//log.Println("	certData.Public", certData.Public)
 	certData.Private, err = ParsePrivateFromFile(info.PrivatePath)
 	certData.Cert, err = ParseCertificateFromFile(info.CertPath)
-	log.Println("certData.Cert", certData.Cert, err)
+	//log.Println("certData.Cert", certData.Cert, err)
 	certData.CertId = fmt.Sprintf("%v", certData.Cert.SerialNumber)
 	//fmt.Println("certData.CertId ", certData.CertId)
 	return

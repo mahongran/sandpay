@@ -8,7 +8,6 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/url"
 )
 
@@ -64,7 +63,7 @@ func LoadCertInfo(info *Config) (err error) {
 	certData.Public = certData.EncryptCert.PublicKey.(*rsa.PublicKey)
 	//log.Println("	certData.Public", certData.Public)
 	certData.Private, err = ParsePrivateFromFile(info.PrivatePath)
-	log.Println("certData.Private", certData.Private)
+	//log.Println("certData.Private", certData.Private)
 	certData.Cert, err = ParseCertificateFromFile(info.CertPath)
 	//log.Println("certData.Cert", certData.Cert, err)
 	certData.CertId = fmt.Sprintf("%v", certData.Cert.SerialNumber)
