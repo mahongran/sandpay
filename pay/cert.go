@@ -194,6 +194,25 @@ func LoadPublicKey(path string) (cert *x509.Certificate, err error) {
 	}
 	return
 }
+func NewPublicSha1Verify(signature, str string) (ok bool, err error) {
+
+	//log.Println("vals", vals)
+
+	hash := crypto.Hash.New(crypto.SHA1)
+	hash.Write([]byte(str))
+	hashed := hash.Sum(nil)
+
+	var inSign []byte
+	inSign, err1 := Base64Decode(signature)
+	if err1 != nil {
+		return false, fmt.Errorf("解析返回signature失败1 %v", err1)
+	}
+	err = rsa.VerifyPKCS1v15(certData.Public, crypto.SHA1, hashed, inSign)
+	if err != nil {
+		return false, fmt.Errorf("解析返回signature失败2 %v", err1)
+	}
+	return true, nil
+}
 
 // 返回数据验签
 func PublicSha1Verify(vals url.Values) (res interface{}, err error) {

@@ -374,3 +374,11 @@ func NotifyVerifyData(dataString string) (response response.Response, err error)
 	}
 	return response, err
 }
+
+// NewNotifyVerifyData 回调参数校验
+func NewNotifyVerifyData(sign, data string) (ok bool, err error) {
+
+	ok, err = pay.NewPublicSha1Verify(sign, data)
+
+	return ok, err
+}
