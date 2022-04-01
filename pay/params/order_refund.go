@@ -13,7 +13,7 @@ type OrderRefundParams struct {
 	//10. 退货原因
 	RefundReason string `json:"refundReason"`
 	//19. 扩展域
-	Extends string `json:"extends"`
+	Extends string `json:"extend"`
 }
 
 func (params *OrderRefundParams) SetOrderNo(orderNo string) *OrderRefundParams {

@@ -42,7 +42,7 @@ type OrderPayBody struct {
 	//	18. 商户扩展参数
 	MerchExtendParams string `json:"merchExtendParams"`
 	//19. 扩展域
-	Extends string `json:"extends"`
+	Extends string `json:"extend"`
 	//支付工具
 	PayTool string `json:"payTool,omitempty"`
 }
