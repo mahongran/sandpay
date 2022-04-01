@@ -282,7 +282,7 @@ func (sandPay *SandPay) OrderQuery(orderNo, extend, channelType, productId strin
 	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
 	postData := pay.GeneratePostData(signDataJsonString, sign)
 
-	data, err := pay.PayPost(config.ApiHost+"/order/query", postData)
+	data, err := pay.PayPost(config.ApiHost+"/gw/api/order/query", postData)
 
 	if err != nil {
 		return
