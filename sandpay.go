@@ -266,13 +266,13 @@ func (sandPay *SandPay) OrderPay(params params.OrderPayParams) (resp response.Or
 }
 
 // 订单查询接口
-func (sandPay *SandPay) OrderQuery(orderNo string, extend string) (resp response.OrderQueryResponse, err error) {
+func (sandPay *SandPay) OrderQuery(orderNo, extend, channelType, productId string) (resp response.OrderQueryResponse, err error) {
 	config := sandPay.Config
 	timeString := time.Now().Format("20060102150405")
 
 	header := request.Header{}
 	header.SetMethod(`sandpay.trade.query`).SetVersion(`1.0`).SetAccessType("1")
-	header.SetChannelType("07").SetMid(config.MerId).SetProductId("00000007").SetReqTime(timeString)
+	header.SetChannelType(channelType).SetMid(config.MerId).SetProductId(productId).SetReqTime(timeString)
 	body := request.OrderQueryBody{
 		OrderCode: orderNo,
 		Extends:   extend,
@@ -292,13 +292,13 @@ func (sandPay *SandPay) OrderQuery(orderNo string, extend string) (resp response
 }
 
 // 退货申请接口
-func (sandPay *SandPay) OrderRefund(refundParams params.OrderRefundParams) (resp response.OrderRefundResponse, err error) {
+func (sandPay *SandPay) OrderRefund(refundParams params.OrderRefundParams, channelType, productId string) (resp response.OrderRefundResponse, err error) {
 	config := sandPay.Config
 	timeString := time.Now().Format("20060102150405")
 
 	header := request.Header{}
 	header.SetMethod(`sandpay.trade.refund`).SetVersion(`1.0`).SetAccessType("1")
-	header.SetChannelType("07").SetMid(config.MerId).SetProductId("00000007").SetReqTime(timeString)
+	header.SetChannelType(channelType).SetMid(config.MerId).SetProductId(productId).SetReqTime(timeString)
 	body := request.OrderRefundBody{
 		OrderCode:    refundParams.OrderNo,
 		OriOrderCode: refundParams.RefundNO,
@@ -321,13 +321,13 @@ func (sandPay *SandPay) OrderRefund(refundParams params.OrderRefundParams) (resp
 }
 
 // 退货申请接口
-func (sandPay *SandPay) OrderRefunds(refundParams params.OrderRefundParams) (resp response.OrderRefundResponse, err error) {
+func (sandPay *SandPay) OrderRefunds(refundParams params.OrderRefundParams, channelType, productId string) (resp response.OrderRefundResponse, err error) {
 	config := sandPay.Config
 	timeString := time.Now().Format("20060102150405")
 
 	header := request.Header{}
 	header.SetMethod(`sandpay.trade.refund`).SetVersion(`1.0`).SetAccessType("1")
-	header.SetChannelType("07").SetMid(config.MerId).SetProductId("00000007").SetReqTime(timeString)
+	header.SetChannelType(channelType).SetMid(config.MerId).SetProductId(productId).SetReqTime(timeString)
 	body := request.OrderRefundBody{
 		OrderCode:    refundParams.OrderNo,
 		OriOrderCode: refundParams.RefundNO,
