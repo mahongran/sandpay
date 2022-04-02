@@ -23,6 +23,8 @@ type OrderPayParams struct {
 	ClientIp string
 	//支付模式
 	PayMode string `json:"payMode"`
+	//支付方式
+	PayModeList string `json:"payModeList"`
 	//	7. 支付扩展域  ANS0.1024 C 具体格式根据 payMode 确定,
 	PayExtra PayExtraWeiChat `json:"payExtra"`
 	//19. 扩展域

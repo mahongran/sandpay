@@ -141,6 +141,7 @@ func (sandPay *SandPay) OrderPayH5(params params.OrderPayParams) (resp response.
 		Body:        params.Body,
 		TxnTimeOut:  params.TxnTimeOut,
 		//PayMode:     params.PayMode,
+		PayModeList: params.PayModeList,
 		//PayExtra:    params.PayExtra.ToJson(),
 		//ClientIp:    params.ClientIp,
 		NotifyUrl: sandPay.Config.NotifyUrl,
