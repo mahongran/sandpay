@@ -15,6 +15,7 @@ type OrderRefundResponse struct {
 		DiscAmount          string `json:"discAmount"`
 		TxnCompleteTime     string `json:"txnCompleteTime"`
 		PayTime             string `json:"payTime"`
+		RefundTime          string `json:"refundTime"`
 		ClearDate           string `json:"clearDate"`
 		AccNo               string `json:"accNo"`
 		MidFee              string `json:"midFee"`
