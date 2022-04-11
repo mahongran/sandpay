@@ -375,6 +375,33 @@ func NotifyVerifyData(dataString string) (response response.Response, err error)
 	}
 	return response, err
 }
+func (sandPay *SandPay) ReAutoNotice(orderCode, noticeType string) (response response.Response, err error) {
+	config := sandPay.Config
+	timeString := time.Now().Format("20060102150405")
+
+	header := request.Header{}
+	header.SetMethod(`sandpay.trade.notify`).SetVersion(`1.0`).SetAccessType("1")
+	header.SetChannelType("08").SetMid(config.MerId).SetProductId("00002000").SetReqTime(timeString)
+	var mcAutoNotice struct {
+		//商户订单号
+		OrderCode string `json:"orderCode"`
+		//商户自主重发异步通知接口 通知类型
+		NoticeType string `json:"noticeType"`
+	}
+	mcAutoNotice.OrderCode = orderCode
+	mcAutoNotice.NoticeType = noticeType
+
+	signDataJsonString := pay.GenerateSignString(mcAutoNotice, header)
+	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
+	postData := pay.GeneratePostData(signDataJsonString, sign)
+
+	data, err := pay.PayPost(config.ApiHost+"/gateway/api/order/mcAutoNotice", postData)
+	if err != nil {
+		return
+	}
+	response.SetData(data.Data)
+	return response, err
+}
 
 // NewNotifyVerifyData 回调参数校验
 func NewNotifyVerifyData(sign, data string) (ok bool, err error) {
