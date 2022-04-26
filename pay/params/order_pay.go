@@ -29,6 +29,8 @@ type OrderPayParams struct {
 	PayExtra PayExtraWeiChat `json:"payExtra"`
 	//19. 扩展域
 	Extends string
+	//1-限定不能使用贷记卡 4-限定不能使用花呗 5-限定不能使用贷记卡+花呗
+	LimitPay string `json:"limitPay"`
 }
 
 func (params *OrderPayParams) SetPayMode(object string) *OrderPayParams {
