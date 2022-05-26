@@ -313,7 +313,7 @@ func (sandPay *SandPay) OrderRefund(refundParams params.OrderRefundParams, chann
 	signDataJsonString := pay.GenerateSignString(body, header)
 	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
 	postData := pay.GeneratePostData(signDataJsonString, sign)
-
+	spew.Dump(postData)
 	data, err := pay.PayPost(config.ApiHost+"/gateway/api/order/refund", postData)
 	if err != nil {
 		return
