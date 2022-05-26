@@ -2,6 +2,7 @@ package sandpay
 
 import (
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/mahongran/sandpay/pay"
 	"github.com/mahongran/sandpay/pay/params"
 	"github.com/mahongran/sandpay/pay/request"
@@ -341,7 +342,7 @@ func (sandPay *SandPay) OrderRefunds(refundParams params.OrderRefundParams, chan
 	signDataJsonString := pay.GenerateSignString(body, header)
 	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
 	postData := pay.GeneratePostData(signDataJsonString, sign)
-
+	spew.Dump(postData)
 	data, err := pay.PayPost(config.ApiHost+"/order/refund", postData)
 	if err != nil {
 		return
