@@ -442,7 +442,7 @@ func (sandPay *SandPay) OrderPayH5Quick(params params.OrderPayParams) (resp resp
 
 	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
 
-	data, err := pay.PayPostRedirect(config.ApiHost+"/gw/web/order/create", signDataJsonString, sign)
+	data, err := pay.PayPostRedirect(config.ApiHost+"/fastPay/quickPay/index", signDataJsonString, sign)
 	if err != nil {
 		return
 	}
