@@ -2,14 +2,15 @@ package sandpay
 
 import (
 	"fmt"
+	"net/url"
+	"strings"
+	"time"
+
 	"github.com/davecgh/go-spew/spew"
 	"github.com/mahongran/sandpay/pay"
 	"github.com/mahongran/sandpay/pay/params"
 	"github.com/mahongran/sandpay/pay/request"
 	"github.com/mahongran/sandpay/pay/response"
-	"net/url"
-	"strings"
-	"time"
 )
 
 var Client SandPay
@@ -404,7 +405,7 @@ func (sandPay *SandPay) ReAutoNotice(orderCode, noticeType string) (response res
 	return response, err
 }
 
-// NewNotifyVerifyData 回调参数校验
+// NewNotifyVerifyData 回调参数校验 测试软件包更新
 func NewNotifyVerifyData(sign, data string) (ok bool, err error) {
 
 	ok, err = pay.NewPublicSha1Verify(sign, data)
