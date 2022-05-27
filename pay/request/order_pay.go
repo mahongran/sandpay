@@ -45,4 +45,6 @@ type OrderPayBody struct {
 	Extends string `json:"extend"`
 	//支付工具
 	PayTool string `json:"payTool,omitempty"`
+	// 商户上送的订单时间
+	OrderTime string `json:"orderTime,omitempty"`
 }

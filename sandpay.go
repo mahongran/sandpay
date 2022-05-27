@@ -412,3 +412,40 @@ func NewNotifyVerifyData(sign, data string) (ok bool, err error) {
 
 	return ok, err
 }
+
+// 聚合统一下单快捷支付接口
+func (sandPay *SandPay) OrderPayH5Quick(params params.OrderPayParams) (resp response.OrderPayResponse, err error) {
+	config := sandPay.Config
+	timeString := time.Now().Format("20060102150405")
+
+	header := request.Header{}
+	header.SetMethod(`sandPay.fastPay.quickPay.index`).SetVersion(`1.0`).SetAccessType("1")
+	header.SetChannelType("08").SetMid(config.MerId).SetProductId("00000016").SetReqTime(timeString)
+	body := request.OrderPayBody{
+		UserId:      params.UserId,
+		OrderCode:   params.OrderNo,
+		OrderTime:   params.OrderTime,
+		TotalAmount: params.GetTotalAmountToString(),
+		Subject:     params.Subject,
+		Body:        params.Body,
+		TxnTimeOut:  params.TxnTimeOut,
+		//PayMode:     params.PayMode,
+		PayModeList: params.PayModeList,
+		//PayExtra:    params.PayExtra.ToJson(),
+		//ClientIp:    params.ClientIp,
+		NotifyUrl: sandPay.Config.NotifyUrl,
+		FrontUrl:  sandPay.Config.FrontUrl,
+		Extends:   params.Extends,
+	}
+
+	signDataJsonString := pay.GenerateSignString(body, header)
+
+	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
+
+	data, err := pay.PayPostRedirect(config.ApiHost+"/gw/web/order/create", signDataJsonString, sign)
+	if err != nil {
+		return
+	}
+	resp.Body.QrCode = data.Data
+	return resp, err
+}

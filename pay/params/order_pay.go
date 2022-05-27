@@ -9,6 +9,10 @@ const PayModWeiXinMp = "sand_wx"
 
 //支付参数定义
 type OrderPayParams struct {
+	// 用户id
+	UserId string `json:"userId,omitempty"`
+	// 商户上送的订单时间
+	OrderTime string `json:"orderTime,omitempty"`
 	//商户订单号
 	OrderNo string
 	//2. 订单金额
