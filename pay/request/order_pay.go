@@ -47,4 +47,6 @@ type OrderPayBody struct {
 	PayTool string `json:"payTool,omitempty"`
 	// 商户上送的订单时间
 	OrderTime string `json:"orderTime,omitempty"`
+	// 币种
+	CurrencyCode string `json:"currencyCode,omitempty"`
 }

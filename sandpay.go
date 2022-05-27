@@ -433,9 +433,10 @@ func (sandPay *SandPay) OrderPayH5Quick(params params.OrderPayParams) (resp resp
 		PayModeList: params.PayModeList,
 		//PayExtra:    params.PayExtra.ToJson(),
 		//ClientIp:    params.ClientIp,
-		NotifyUrl: sandPay.Config.NotifyUrl,
-		FrontUrl:  sandPay.Config.FrontUrl,
-		Extends:   params.Extends,
+		NotifyUrl:    sandPay.Config.NotifyUrl,
+		FrontUrl:     sandPay.Config.FrontUrl,
+		Extends:      params.Extends,
+		CurrencyCode: params.CurrencyCode,
 	}
 
 	signDataJsonString := pay.GenerateSignString(body, header)
