@@ -241,7 +241,7 @@ func (sandPay *SandPay) OrderPay(params params.OrderPayParams) (resp response.Or
 
 	header := request.Header{}
 	header.SetMethod(`sandpay.trade.pay`).SetVersion(`1.0`).SetAccessType("1")
-	header.SetChannelType("07").SetMid(config.MerId).SetProductId("00000005").SetReqTime(timeString)
+	header.SetChannelType("07").SetMid(config.MerId).SetProductId("00000008").SetReqTime(timeString)
 	body := request.OrderPayBody{
 		OrderCode:   params.OrderNo,
 		TotalAmount: params.GetTotalAmountToString(),
