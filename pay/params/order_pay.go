@@ -15,6 +15,8 @@ type OrderPayParams struct {
 	OrderTime string `json:"orderTime,omitempty"`
 	// 币种
 	CurrencyCode string `json:"currencyCode,omitempty"`
+	// 卡号
+	CardNo string `json:"cardNo,omitempty"`
 	//商户订单号
 	OrderNo string
 	//2. 订单金额

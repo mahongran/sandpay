@@ -49,4 +49,6 @@ type OrderPayBody struct {
 	OrderTime string `json:"orderTime,omitempty"`
 	// 币种
 	CurrencyCode string `json:"currencyCode,omitempty"`
+	// 卡号
+	CardNo string `json:"cardNo,omitempty"`
 }
