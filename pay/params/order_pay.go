@@ -41,6 +41,40 @@ type OrderPayParams struct {
 	LimitPay string `json:"limitPay"`
 }
 
+// 支付参数
+type OrderPayH5Params struct {
+	// 用户id
+	UserId string `json:"userId,omitempty"`
+	// 商户上送的订单时间
+	OrderTime string `json:"orderTime,omitempty"`
+	// 币种
+	CurrencyCode string `json:"currencyCode,omitempty"`
+	// 卡号
+	CardNo string `json:"cardNo,omitempty"`
+	//商户订单号
+	OrderNo string
+	//2. 订单金额
+	TotalAmount int
+	//3. 订单标题
+	Subject string
+	//4. 订单描述
+	Body string
+	//5. 订单超时时间
+	TxnTimeOut string
+	//	8. 客户端 IP
+	ClientIp string
+	//支付模式
+	PayMode string `json:"payMode"`
+	//支付方式
+	PayModeList string `json:"payModeList"`
+	//	7. 支付扩展域  ANS0.1024 C 具体格式根据 payMode 确定,
+	PayExtra map[string]string `json:"payExtra"`
+	//19. 扩展域
+	Extends string
+	//1-限定不能使用贷记卡 4-限定不能使用花呗 5-限定不能使用贷记卡+花呗
+	LimitPay string `json:"limitPay"`
+}
+
 func (params *OrderPayParams) SetPayMode(object string) *OrderPayParams {
 	params.PayMode = object
 	return params
