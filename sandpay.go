@@ -249,7 +249,7 @@ func (sandPay *SandPay) OrderPay(params params.OrderPayParams) (resp response.Or
 		Body:        params.Body,
 		TxnTimeOut:  params.TxnTimeOut,
 		PayMode:     params.PayMode,
-		PayExtra:    params.PayExtra,
+		PayExtra:    params.PayExtra.ToJson(),
 		ClientIp:    params.ClientIp,
 		CardNo:      params.CardNo,
 		NotifyUrl:   sandPay.Config.NotifyUrl,
