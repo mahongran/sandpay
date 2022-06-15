@@ -11,7 +11,7 @@ import (
 
 func TestSandPay_OrderPay(t *testing.T) {
 	type args struct {
-		params params.OrderPayParams
+		params params.OrderPayH5Params
 	}
 	tests := []struct {
 		name    string
@@ -22,7 +22,7 @@ func TestSandPay_OrderPay(t *testing.T) {
 		{
 			"test01",
 			args{
-				params: params.OrderPayParams{
+				params: params.OrderPayH5Params{
 					OrderNo:     strconv.Itoa(int(time.Now().UnixNano())),
 					TotalAmount: 1,
 					Subject:     "话费充值",
@@ -30,10 +30,6 @@ func TestSandPay_OrderPay(t *testing.T) {
 					TxnTimeOut:  "20191130000000",
 					ClientIp:    "103.30.99.197",
 					PayMode:     params.PayModWeiXinMp,
-					PayExtra: params.PayExtraWeiChat{
-						SubAppId: "xxx",
-						OpenId:   "xxx",
-					},
 				},
 			},
 			false,

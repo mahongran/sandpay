@@ -235,7 +235,7 @@ func (sandPay *SandPay) OrderPayQrAlipay(params params.OrderPayParams) (resp res
 }
 
 // 统一下单接口
-func (sandPay *SandPay) OrderPay(params params.OrderPayParams) (resp response.OrderPayResponse, err error) {
+func (sandPay *SandPay) OrderPay(params params.OrderPayH5Params) (resp response.OrderPayResponse, err error) {
 	config := sandPay.Config
 	timeString := time.Now().Format("20060102150405")
 
@@ -249,7 +249,7 @@ func (sandPay *SandPay) OrderPay(params params.OrderPayParams) (resp response.Or
 		Body:        params.Body,
 		TxnTimeOut:  params.TxnTimeOut,
 		PayMode:     params.PayMode,
-		PayExtra:    params.PayExtra.ToJson(),
+		PayExtra:    params.PayExtra,
 		ClientIp:    params.ClientIp,
 		CardNo:      params.CardNo,
 		NotifyUrl:   sandPay.Config.NotifyUrl,

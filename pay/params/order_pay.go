@@ -68,7 +68,7 @@ type OrderPayH5Params struct {
 	//支付方式
 	PayModeList string `json:"payModeList"`
 	//	7. 支付扩展域  ANS0.1024 C 具体格式根据 payMode 确定,
-	PayExtra map[string]string `json:"payExtra"`
+	PayExtra string `json:"payExtra"`
 	//19. 扩展域
 	Extends string
 	//1-限定不能使用贷记卡 4-限定不能使用花呗 5-限定不能使用贷记卡+花呗
@@ -97,6 +97,11 @@ func (params *OrderPayParams) SetTotalAmount(object int) *OrderPayParams {
 }
 
 func (params *OrderPayParams) GetTotalAmountToString() string {
+	amount := fmt.Sprintf("%012d", params.TotalAmount)
+	return amount
+}
+
+func (params *OrderPayH5Params) GetTotalAmountToString() string {
 	amount := fmt.Sprintf("%012d", params.TotalAmount)
 	return amount
 }
