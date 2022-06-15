@@ -249,12 +249,12 @@ func (sandPay *SandPay) OrderPay(params params.OrderPayParams) (resp response.Or
 		Body:        params.Body,
 		TxnTimeOut:  params.TxnTimeOut,
 		PayMode:     params.PayMode,
-		PayExtra:    params.PayExtra.ToJson(),
-		ClientIp:    params.ClientIp,
-		CardNo:      params.CardNo,
-		NotifyUrl:   sandPay.Config.NotifyUrl,
-		FrontUrl:    sandPay.Config.FrontUrl,
-		Extends:     params.Extends,
+		// PayExtra:    params.PayExtra.ToJson(),
+		ClientIp:  params.ClientIp,
+		CardNo:    params.CardNo,
+		NotifyUrl: sandPay.Config.NotifyUrl,
+		FrontUrl:  sandPay.Config.FrontUrl,
+		Extends:   params.Extends,
 	}
 
 	signDataJsonString := pay.GenerateSignString(body, header)
