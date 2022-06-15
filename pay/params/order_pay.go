@@ -34,7 +34,7 @@ type OrderPayParams struct {
 	//支付方式
 	PayModeList string `json:"payModeList"`
 	//	7. 支付扩展域  ANS0.1024 C 具体格式根据 payMode 确定,
-	PayExtra PayExtraWeiChat `json:"payExtra"`
+	PayExtra string `json:"payExtra"`
 	//19. 扩展域
 	Extends string
 	//1-限定不能使用贷记卡 4-限定不能使用花呗 5-限定不能使用贷记卡+花呗
@@ -45,13 +45,14 @@ func (params *OrderPayParams) SetPayMode(object string) *OrderPayParams {
 	params.PayMode = object
 	return params
 }
-func (params *OrderPayParams) SetPayExtra(openId string, AppId string) *OrderPayParams {
-	params.PayExtra = PayExtraWeiChat{
-		SubAppId: AppId,
-		OpenId:   openId,
-	}
-	return params
-}
+
+// func (params *OrderPayParams) SetPayExtra(openId string, AppId string) *OrderPayParams {
+// 	params.PayExtra = PayExtraWeiChat{
+// 		SubAppId: AppId,
+// 		OpenId:   openId,
+// 	}
+// 	return params
+// }
 
 func (params *OrderPayParams) SetOrderNo(orderNo string) *OrderPayParams {
 	params.OrderNo = orderNo
