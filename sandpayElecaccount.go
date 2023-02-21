@@ -3,7 +3,6 @@ package sandpay
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/mahongran/sandpay/pay"
 	"github.com/mahongran/sandpay/pay/elecaccountParams"
 	"github.com/mahongran/sandpay/pay/elecaccountRequest"
@@ -38,8 +37,6 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	body.Data = postData
 	DataByte, _ := json.Marshal(body)
 	fmt.Println("请求参数:" + string(DataByte))
-
-	spew.Dump(DataByte)
 	resp, err := util.Do(config.CloudAccountApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
 	if err != nil {
 		return "", err
