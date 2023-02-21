@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"github.com/mahongran/sandpay/util"
 	"io/ioutil"
 	"net/url"
 )
@@ -47,9 +48,9 @@ type Config struct {
 	// wind导出的加密证书地址
 	EncryptCertPath string
 	//API 网关地址
-	ApiHost string
-
-	NotifyUrl string
+	ApiHost             string
+	CloudAccountApiHost string
+	NotifyUrl           string
 }
 
 func LoadCertInfo(info *Config) (err error) {
@@ -269,4 +270,14 @@ func PrivateSha1SignData(signData string) (string, error) {
 		return "", err
 	}
 	return Base64Encode(signer), nil
+}
+
+// FormEncryptKey 云账户验签
+func FormEncryptKey(key string) (string, error) {
+	return util.RsaEncrypt(key, certData.Public)
+}
+
+// FormSign 云账户验签
+func FormSign(data string) (string, error) {
+	return util.SignSand(certData.Private, data)
 }
