@@ -1,6 +1,7 @@
 package sandpay
 
 import (
+	"crypto/rsa"
 	"encoding/json"
 	"fmt"
 	"github.com/mahongran/sandpay/pay"
@@ -9,6 +10,10 @@ import (
 	"github.com/mahongran/sandpay/util"
 	"time"
 )
+
+func (sandPay *SandPay) ValidateSign(data, signStr string, PublickKeyP *rsa.PublicKey) error {
+	return util.Verification(data, signStr, PublickKeyP)
+}
 
 // OneClickAccountOpening 云账户一键开户
 func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {

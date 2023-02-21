@@ -96,8 +96,8 @@ func SandVerification(data, signature []byte, publicKey *rsa.PublicKey) error {
 	return rsa.VerifyPKCS1v15(publicKey, hash, h.Sum(nil), signature)
 }
 
-//验签
-func verification(data, signStr string, PublickKeyP *rsa.PublicKey) error {
+// Verification 验签
+func Verification(data, signStr string, PublickKeyP *rsa.PublicKey) error {
 
 	sign, err := base64.StdEncoding.DecodeString(strings.Replace(signStr, " ", "+", -1))
 	if err != nil {
