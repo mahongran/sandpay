@@ -2,13 +2,21 @@ package pay
 
 import (
 	"crypto"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha1"
+	"crypto/sha256"
 	"crypto/x509"
+	"encoding/base64"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"github.com/mahongran/sandpay/util"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/url"
 )
 
@@ -284,4 +292,94 @@ func FormSign(data string) (string, error) {
 
 func ValidateSign(data, signStr string) error {
 	return util.Verification(data, signStr, certData.Public)
+}
+func Encrypt(paramsJson map[string]interface{}) (ResJson map[string]interface{}, err error) {
+	aesKey, err := genRandomStringByLength(16)
+	if err != nil {
+		return ResJson, err
+	}
+	aesKeyBytes := []byte(aesKey)
+	log.Printf("生成加密随机数：%v", aesKey)
+	plainValue, err := json.Marshal(paramsJson)
+	if err != nil {
+		return ResJson, err
+	}
+	log.Printf("AES加密前值：%v", string(plainValue))
+	encryptValueBytes, err := encryptAES(plainValue, aesKeyBytes)
+	if err != nil {
+		return ResJson, err
+	}
+	encryptValue := base64.StdEncoding.EncodeToString(encryptValueBytes)
+	log.Printf("AES加密后值：%v", encryptValue)
+	paramsJson = make(map[string]interface{})
+	paramsJson["data"] = encryptValue
+	encryptKeyBytes, err := encryptRSA(aesKeyBytes)
+	if err != nil {
+		return ResJson, err
+	}
+	sandEncryptKey := base64.StdEncoding.EncodeToString(encryptKeyBytes)
+	paramsJson["encryptKey"] = sandEncryptKey
+	paramsJson["encryptType"] = "AES"
+	return paramsJson, nil
+}
+
+func genRandomStringByLength(length int) (string, error) {
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	bytes := make([]byte, length)
+	_, err := io.ReadFull(rand.Reader, bytes)
+	if err != nil {
+		return "", err
+	}
+	for i, b := range bytes {
+		bytes[i] = letters[b%byte(len(letters))]
+	}
+	return string(bytes), nil
+}
+
+func encryptAES(plainValue []byte, aesKeyBytes []byte) ([]byte, error) {
+	block, err := aes.NewCipher(aesKeyBytes)
+	if err != nil {
+		return nil, err
+	}
+	iv := make([]byte, aes.BlockSize)
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+	mode := cipher.NewCBCEncrypter(block, iv)
+	mode.CryptBlocks(plainValue, plainValue)
+	encryptValue := append(iv, plainValue...)
+	return encryptValue, nil
+}
+func encryptRSA(aesKeyBytes []byte) ([]byte, error) {
+	label := []byte("")
+	hash := sha256.New()
+	encryptKeyBytes, err := rsa.EncryptOAEP(hash, rand.Reader, certData.Public, aesKeyBytes, label)
+	if err != nil {
+		return nil, err
+	}
+	return encryptKeyBytes, nil
+}
+func Sign(paramsJson map[string]interface{}) (ResJson map[string]interface{}, err error) {
+	// 获取需要签名的明文数据
+	plainText, ok := paramsJson["data"].(string)
+	if !ok {
+		return ResJson, fmt.Errorf("data字段不是字符串类型")
+	}
+	// 打印待签名报文
+	log.Printf("待签名报文：%s", plainText)
+
+	// 使用SHA1WithRSA算法进行签名
+	h := sha1.New()
+	h.Write([]byte(plainText))
+	hashed := h.Sum(nil)
+	signature, err := rsa.SignPKCS1v15(rand.Reader, certData.Private, crypto.SHA1, hashed)
+	if err != nil {
+		return ResJson, err
+	}
+	signatureBase64 := base64.StdEncoding.EncodeToString(signature)
+
+	// 将签名和签名算法添加到JSON对象中
+	paramsJson["sign"] = signatureBase64
+	paramsJson["signType"] = "SHA1WithRSA"
+	return paramsJson, nil
 }
