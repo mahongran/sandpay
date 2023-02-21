@@ -305,11 +305,11 @@ func Encrypt(paramsJson map[string]interface{}) (ResJson map[string]interface{},
 		return ResJson, err
 	}
 	log.Printf("AES加密前值：%v", string(plainValue))
-	encryptValueBytes, err := encryptAES(plainValue, aesKeyBytes)
+	encryptValueBytes, err := encryptAES(string(plainValue), aesKeyBytes)
 	if err != nil {
 		return ResJson, err
 	}
-	encryptValue := base64.StdEncoding.EncodeToString(encryptValueBytes)
+	encryptValue := base64.StdEncoding.EncodeToString([]byte(encryptValueBytes))
 	log.Printf("AES加密后值：%v", encryptValue)
 	paramsJson = make(map[string]interface{})
 	paramsJson["data"] = encryptValue
@@ -335,20 +335,28 @@ func genRandomStringByLength(length int) (string, error) {
 	}
 	return string(bytes), nil
 }
-
-func encryptAES(plainValue []byte, aesKeyBytes []byte) ([]byte, error) {
+func encryptAES(plainValue string, aesKeyBytes []byte) (string, error) {
+	// 创建一个新的AES加密块
 	block, err := aes.NewCipher(aesKeyBytes)
 	if err != nil {
-		return nil, err
+		return "", fmt.Errorf("无法创建AES加密块：%v", err)
+	} // 对明文数据进行填充
+	paddingLength := block.BlockSize() - len(plainValue)%block.BlockSize()
+	padding := make([]byte, paddingLength)
+	for i := range padding {
+		padding[i] = byte(paddingLength)
 	}
+	paddedData := append([]byte(plainValue), padding...)
+
+	// 使用AES加密算法进行加密
+	encryptValue := make([]byte, len(paddedData))
 	iv := make([]byte, aes.BlockSize)
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return nil, err
-	}
-	mode := cipher.NewCBCEncrypter(block, iv)
-	mode.CryptBlocks(plainValue, plainValue)
-	encryptValue := append(iv, plainValue...)
-	return encryptValue, nil
+	stream := cipher.NewCBCEncrypter(block, iv)
+	stream.CryptBlocks(encryptValue, paddedData)
+
+	// 对加密结果进行Base64编码
+	encryptValueBase64 := base64.StdEncoding.EncodeToString(encryptValue)
+	return encryptValueBase64, nil
 }
 func encryptRSA(aesKeyBytes []byte) ([]byte, error) {
 	label := []byte("")
