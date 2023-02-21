@@ -311,7 +311,6 @@ func Encrypt(paramsJson map[string]interface{}) (ResJson map[string]interface{},
 	}
 	encryptValue := base64.StdEncoding.EncodeToString([]byte(encryptValueBytes))
 	log.Printf("AES加密后值：%v", encryptValue)
-	paramsJson = make(map[string]interface{})
 	paramsJson["data"] = encryptValue
 	encryptKeyBytes, err := encryptRSA(aesKeyBytes)
 	if err != nil {
