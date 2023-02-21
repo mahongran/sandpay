@@ -32,7 +32,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	sanDe := util.SandAES{}
 	key := sanDe.RandStr(16)
 	postData, _ := FormData(body, key)
-	body.EncryptType, _ = pay.FormEncryptKey(key)
+	body.EncryptKey, _ = pay.FormEncryptKey(key)
 	body.Sign, _ = pay.FormSign(postData)
 	body.Data = postData
 	DataByte, _ := json.Marshal(body)
