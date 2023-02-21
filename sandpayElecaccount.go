@@ -10,10 +10,6 @@ import (
 	"time"
 )
 
-func (sandPay *SandPay) ValidateSign(data, signStr string) error {
-	return pay.ValidateSign(data, signStr)
-}
-
 // OneClickAccountOpening 云账户一键开户
 func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {
 	config := sandPay.Config
@@ -32,18 +28,15 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 		NotifyUrl:       sandPay.Config.NotifyUrl,
 		FrontUrl:        sandPay.Config.FrontUrl,
 	}
-	paramsJson, err := pay.Encrypt(StructToMap(body))
-	if err != nil {
-		return "", err
-	}
-	paramsJson["sign"], _ = pay.FormSign(paramsJson["data"].(string))
-	paramsJson["signType"] = "SHA1WithRSA"
-	//paramsJson, err = pay.Sign(paramsJson)
-	//
-	//if err != nil {
-	//	return "", err
-	//}
-	DataByte, _ := json.Marshal(paramsJson)
+	sanDe := util.SandAES{}
+	key := sanDe.RandStr(16)
+	dataMap := StructToMap(body)
+	dataMap["data"], _ = FormData(dataMap, key)
+	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
+	dataMap["sign"], _ = pay.FormSign(dataMap["data"].(string))
+	dataMap["signType"] = "SHA1WithRSA"
+	dataMap["encryptType"] = "AES"
+	DataByte, _ := json.Marshal(dataMap)
 	fmt.Println("请求参数:" + string(DataByte))
 	resp, err := util.Do(config.CloudAccountApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
 	if err != nil {
@@ -55,6 +48,19 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	}
 	fmt.Println("杉德回调解析结果:" + string(resp))
 	return string(resp), nil
+}
+
+func FormData(paraMap interface{}, key string) (string, error) {
+
+	dataJson, err := json.Marshal(paraMap)
+	if err != nil {
+		return "", err
+	}
+	aes := util.SandAES{}
+	aes.Key = []byte(key)
+
+	data := aes.Encypt5(dataJson)
+	return data, nil
 }
 
 func StructToMap(p interface{}) (list map[string]interface{}) {
