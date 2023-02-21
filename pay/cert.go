@@ -281,3 +281,7 @@ func FormEncryptKey(key string) (string, error) {
 func FormSign(data string) (string, error) {
 	return util.SignSand(certData.Private, data)
 }
+
+func ValidateSign(data, signStr string) error {
+	return util.Verification(data, signStr, certData.Public)
+}
