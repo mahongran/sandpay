@@ -36,10 +36,13 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	if err != nil {
 		return "", err
 	}
-	paramsJson, err = pay.Sign(paramsJson)
-	if err != nil {
-		return "", err
-	}
+	paramsJson["sign"], _ = pay.FormSign(paramsJson["data"].(string))
+	paramsJson["signType"] = "SHA1WithRSA"
+	//paramsJson, err = pay.Sign(paramsJson)
+	//
+	//if err != nil {
+	//	return "", err
+	//}
 	DataByte, _ := json.Marshal(paramsJson)
 	fmt.Println("请求参数:" + string(DataByte))
 	resp, err := util.Do(config.CloudAccountApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
