@@ -25,6 +25,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 		NickName:        params.NickName,
 		Name:            params.Name,
 		IdType:          params.IdType,
+		IdNo:            params.IdNo,
 		Mobile:          params.Mobile,
 		NotifyUrl:       sandPay.Config.NotifyUrl,
 		FrontUrl:        sandPay.Config.FrontUrl,
