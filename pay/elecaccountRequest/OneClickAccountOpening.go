@@ -11,6 +11,7 @@ type OneClickAccountOpening struct {
 	NickName        string `json:"nickName"`        //会员昵称
 	Name            string `json:"name"`            //会员姓名
 	IdType          string `json:"idType"`          //01：身份证
+	IdNo            string `json:"idNo"`            //身份证号
 	Mobile          string `json:"mobile"`          //会员手机号
 	NotifyUrl       string `json:"notifyUrl"`       //异步通知地址
 	FrontUrl        string `json:"frontUrl"`        //前台通知地址

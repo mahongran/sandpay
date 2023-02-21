@@ -12,6 +12,8 @@ type OneClickAccountOpening struct {
 	Name string `json:"name"`
 	//01：身份证
 	IdType string `json:"idType"`
+	//身份证号
+	IdNo string `json:"idNo"`
 	//会员手机号
 	Mobile string `json:"mobile"`
 	//异步通知地址
