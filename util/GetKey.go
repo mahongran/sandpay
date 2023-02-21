@@ -81,6 +81,15 @@ func SignSand(privateKey *rsa.PrivateKey, data string) (string, error) {
 	}
 
 	return base64.StdEncoding.EncodeToString(sign), err
+
+	//hash := sha256.Sum256([]byte(data))
+	//signature, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, hash[:])
+	//if err != nil {
+	//	return "", err
+	//}
+	//
+	//return base64.StdEncoding.EncodeToString(signature), nil
+
 }
 
 func SandVerification(data, signature []byte, publicKey *rsa.PublicKey) error {
