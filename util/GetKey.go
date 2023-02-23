@@ -72,7 +72,7 @@ func LoadPublicKey(pemPath string) *rsa.PublicKey {
 
 // 签名
 func SignSand(privateKey *rsa.PrivateKey, data string) (string, error) {
-	fmt.Println("sign 加密前", data)
+	log.Printf("sign 加密前：%v", data)
 	h := crypto.SHA1.New()
 	h.Write([]byte(data))
 
