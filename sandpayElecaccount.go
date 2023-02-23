@@ -7,6 +7,7 @@ import (
 	"github.com/mahongran/sandpay/pay/elecaccountParams"
 	"github.com/mahongran/sandpay/pay/elecaccountRequest"
 	"github.com/mahongran/sandpay/util"
+	"log"
 	"time"
 )
 
@@ -33,6 +34,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	dataMap := StructToMap(body)
 	dataMap["signType"] = "SHA1WithRSA"
 	dataMap["encryptType"] = "AES"
+
 	dataMap["data"], _ = FormData(dataMap, key)
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	dataMap["sign"], _ = pay.FormSign(dataMap["data"].(string))
@@ -57,10 +59,11 @@ func FormData(paraMap interface{}, key string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	log.Printf("data 加密前：%v", string(dataJson))
 	aes := util.SandAES{}
 	aes.Key = []byte(key)
-
 	data := aes.Encypt5(dataJson)
+	log.Printf("data 加密后：%v", data)
 	return data, nil
 }
 

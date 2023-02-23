@@ -5,15 +5,19 @@ import (
 	"crypto/rsa"
 	"encoding/base64"
 	"fmt"
+	"log"
 )
 
 func RsaEncrypt(value string, rsaPublicKey *rsa.PublicKey) (string, error) {
-	fmt.Println("RSA 加密数据", value)
+	fmt.Println("RSA 加密前", value)
 	buffer, err := rsa.EncryptPKCS1v15(rand.Reader, rsaPublicKey, []byte(value))
 	if err != nil {
 		return "", err
 	}
-	return base64.StdEncoding.EncodeToString(buffer), nil
+	s := base64.StdEncoding.EncodeToString(buffer)
+	log.Printf("RSA 加密后：%v", s)
+
+	return s, nil
 }
 
 //RSA解密

@@ -9,6 +9,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"strings"
 )
 
@@ -71,7 +72,7 @@ func LoadPublicKey(pemPath string) *rsa.PublicKey {
 
 // 签名
 func SignSand(privateKey *rsa.PrivateKey, data string) (string, error) {
-
+	fmt.Println("sign 加密前", data)
 	h := crypto.SHA1.New()
 	h.Write([]byte(data))
 
@@ -79,8 +80,10 @@ func SignSand(privateKey *rsa.PrivateKey, data string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	s := base64.StdEncoding.EncodeToString(sign)
+	log.Printf("sign 加密后：%v", s)
 
-	return base64.StdEncoding.EncodeToString(sign), err
+	return s, err
 
 	//hash := sha256.Sum256([]byte(data))
 	//signature, err := rsa.SignPKCS1v15(rand.Reader, privateKey, crypto.SHA256, hash[:])
