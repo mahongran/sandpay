@@ -31,11 +31,12 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	sanDe := util.SandAES{}
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
+	dataMap["signType"] = "SHA1WithRSA"
+	dataMap["encryptType"] = "AES"
 	dataMap["data"], _ = FormData(dataMap, key)
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	dataMap["sign"], _ = pay.FormSign(dataMap["data"].(string))
-	dataMap["signType"] = "SHA1WithRSA"
-	dataMap["encryptType"] = "AES"
+
 	DataByte, _ := json.Marshal(dataMap)
 	fmt.Println("请求参数:" + string(DataByte))
 	resp, err := util.Do(config.CloudAccountApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
