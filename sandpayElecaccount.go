@@ -14,11 +14,12 @@ import (
 // OneClickAccountOpening 云账户一键开户
 func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {
 	config := sandPay.Config
-	timeString := time.Now().Format("20060102150405")
 	body := elecaccountRequest.OneClickAccountOpening{
 		Mid:             config.MerId,
-		Version:         "1.0",
-		Timestamp:       timeString,
+		SignType:        "SHA1WithRSA",
+		EncryptType:     "AES",
+		Version:         "1.0.0",
+		Timestamp:       time.Now().Format("2006-01-02 15:04:05"),
 		CustomerOrderNo: params.CustomerOrderNo,
 		BizUserNo:       params.BizUserNo,
 		NickName:        params.NickName,
@@ -32,13 +33,10 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	sanDe := util.SandAES{}
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
-	dataMap["signType"] = "SHA1WithRSA"
-	dataMap["encryptType"] = "AES"
-
 	dataMap["data"], _ = FormData(dataMap, key)
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
-	dataMap["sign"], _ = pay.FormSign(dataMap["data"].(string))
-
+	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
+	dataMap["sign"] = sign
 	DataByte, _ := json.Marshal(dataMap)
 	fmt.Println("请求参数:" + string(DataByte))
 	resp, err := util.Do(config.CloudAccountApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))

@@ -13,4 +13,6 @@ type OneClickAccountOpening struct {
 	Mobile          string `json:"mobile"`          //会员手机号
 	NotifyUrl       string `json:"notifyUrl"`       //异步通知地址
 	FrontUrl        string `json:"frontUrl"`        //前台通知地址
+	SignType        string `json:"signType"`        //签名方式
+	EncryptType     string `json:"encryptType"`     //加密方式
 }
