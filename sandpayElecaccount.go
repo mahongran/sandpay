@@ -32,8 +32,8 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 		IdType:          params.IdType,
 		IdNo:            params.IdNo,
 		Mobile:          params.Mobile,
-		NotifyUrl:       sandPay.Config.NotifyUrl,
-		FrontUrl:        sandPay.Config.FrontUrl,
+		NotifyUrl:       params.NotifyUrl,
+		FrontUrl:        params.FrontUrl,
 	}
 	sanDe := util.SandAES{}
 	key := sanDe.RandStr(16)
