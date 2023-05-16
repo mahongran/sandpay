@@ -1,12 +1,17 @@
 package sandpay
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/mahongran/sandpay/pay"
 	"github.com/mahongran/sandpay/pay/elecaccountParams"
 	"github.com/mahongran/sandpay/pay/elecaccountRequest"
 	"github.com/mahongran/sandpay/util"
+	"io"
 	"log"
 	"time"
 )
@@ -51,18 +56,42 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	return string(resp), nil
 }
 
-func FormData(paraMap interface{}, key string) (string, error) {
+func FormData(paraMap interface{}, keys string) (string, error) {
 
-	dataJson, err := json.Marshal(paraMap)
+	plaintext, err := json.Marshal(paraMap)
 	if err != nil {
 		return "", err
 	}
-	log.Printf("data 加密前：%v", string(dataJson))
-	aes := util.SandAES{}
-	aes.Key = []byte(key)
-	data := aes.Encypt5(dataJson)
-	log.Printf("data 加密后：%v", data)
-	return data, nil
+	log.Printf("data 加密前：%v", string(plaintext))
+	// 16 位随机数作为 AES 密钥
+	key := []byte(keys)
+
+	// 创建一个 AES 块密码
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return "", err
+	}
+
+	// 创建一个随机的初始化向量 IV
+	iv := make([]byte, aes.BlockSize)
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return "", err
+	}
+
+	// 创建一个 CTR 加密器
+	stream := cipher.NewCTR(block, iv)
+
+	// 加密数据
+	ciphertext := make([]byte, len(plaintext))
+	stream.XORKeyStream(ciphertext, []byte(plaintext))
+
+	// 将初始化向量和密文连接起来
+	ciphertext = append(iv, ciphertext...)
+
+	// Base64 编码加密结果
+	encoded := base64.StdEncoding.EncodeToString(ciphertext)
+	log.Printf("data 加密后：%v", encoded)
+	return encoded, nil
 }
 
 func StructToMap(p interface{}) (list map[string]interface{}) {
