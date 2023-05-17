@@ -35,7 +35,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	body.OrderAmt = "0.11"
 	body.NotifyUrl = params.NotifyUrl
 	body.FrontUrl = params.FrontUrl
-	body.CreateIp = params.CreateIp
+	body.CreateIp = strings.Replace(params.CreateIp, ".", "_", -1)
 	body.PayExtra = string(PayExtraString)
 	body.AccsplitFlag = "NO"
 	body.SignType = "RSA"
