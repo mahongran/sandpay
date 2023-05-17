@@ -49,7 +49,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	dataMap := StructToMap(body)
 	sign, _ := pay.PrivateSha1SignData(FormatCheckParameter(dataMap))
 	dataMap["sign"] = sign
-	u := "https://faspay-oss.sandpay.com.cn/pay/h5/cloud?" + HttpBuildQuery(dataMap)
+	u := config.CloudAccountApiHost + "?" + HttpBuildQuery(dataMap)
 	return u, nil
 }
 
