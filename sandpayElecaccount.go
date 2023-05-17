@@ -24,6 +24,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	var PayExtraMemberAccountOpening elecaccountRequest.PayExtraMemberAccountOpening
 	PayExtraMemberAccountOpening.UserId = params.UserId
 	PayExtraMemberAccountOpening.NickName = params.NickName
+	PayExtraString, _ := json.Marshal(&PayExtraMemberAccountOpening)
 	config := sandPay.Config
 	body := elecaccountRequest.CloudAccountPackage{}
 	body.Version = "10"
@@ -34,7 +35,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	body.NotifyUrl = params.NotifyUrl
 	body.FrontUrl = params.FrontUrl
 	body.CreateIp = params.CreateIp
-	body.PayExtra = PayExtraMemberAccountOpening
+	body.PayExtra = string(PayExtraString)
 	body.AccsplitFlag = "NO"
 	body.SignType = "RSA"
 	body.StoreId = "000000"
