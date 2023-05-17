@@ -49,17 +49,33 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	dataMap := StructToMap(body)
 	sign, _ := pay.PrivateSha1SignData(FormatCheckParameter(dataMap))
 	dataMap["sign"] = sign
-	u := config.CloudAccountApiHost + "?" + HttpBuildQuery(dataMap)
+	//需要url decode 转码的key
+	keysToUrlDecode := []string{"goods_name", "notify_url", "return_url", "pay_extra", "meta_option", "extend", "merch_extend_params", "sign"}
+	u := config.CloudAccountApiHost + "?" + HttpBuildQuery(dataMap, keysToUrlDecode)
 	return u, nil
 }
 
-// HttpBuildQuery urlencode
-func HttpBuildQuery(params map[string]interface{}) string {
+// HttpBuildQuery url encode
+func HttpBuildQuery(params map[string]interface{}, keysToUrlDecode []string) string {
 	qs := url.Values{}
 	for k, v := range params {
-		qs.Add(k, cast.ToString(v))
+		value := cast.ToString(v)
+		if shouldUrlDecode(k, keysToUrlDecode) {
+			decodedValue, _ := url.QueryUnescape(value)
+			value = decodedValue
+		}
+		qs.Add(k, value)
 	}
 	return qs.Encode()
+}
+
+func shouldUrlDecode(key string, keysToUrlDecode []string) bool {
+	for _, k := range keysToUrlDecode {
+		if key == k {
+			return true
+		}
+	}
+	return false
 }
 
 // OneClickAccountOpening 云账户一键开户
