@@ -47,8 +47,8 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	body.JumpScheme = "sandcash://scpay"
 	body.MetaOption = `[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}]` //固定值
 
-	dataMap := StructToMap(body)
-	sign, _ := pay.PrivateSha1SignData(FormatCheckParameter(dataMap))
+	dataMap := StructToMapString(body)
+	sign, _ := pay.CloudAccountPackageSign(dataMap)
 	dataMap["sign"] = sign
 	//需要url decode 转码的key
 	keysToUrlDecode := []string{"goods_name", "notify_url", "return_url", "pay_extra", "meta_option", "extend", "merch_extend_params", "sign"}
@@ -57,7 +57,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 }
 
 // HttpBuildQuery url encode
-func HttpBuildQuery(params map[string]interface{}, keysToUrlEncode []string) string {
+func HttpBuildQuery(params map[string]string, keysToUrlEncode []string) string {
 	keys := make([]string, 0, len(params))
 	for k := range params {
 		keys = append(keys, k)
@@ -163,7 +163,18 @@ func FormData(paraMap interface{}, keys string) (string, error) {
 	log.Printf("data 加密后：%v", encoded)
 	return encoded, nil
 }
-
+func StructToMapString(p interface{}) (list map[string]string) {
+	data, err := json.Marshal(p)
+	if err != nil {
+		return list
+	}
+	// Unmarshal JSON into map[string]interface{}
+	var m map[string]string
+	if err := json.Unmarshal(data, &m); err != nil {
+		return list
+	}
+	return m
+}
 func StructToMap(p interface{}) (list map[string]interface{}) {
 	data, err := json.Marshal(p)
 	if err != nil {

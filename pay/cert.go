@@ -18,6 +18,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/url"
+	"sort"
+	"strings"
 )
 
 var certData *Cert
@@ -278,6 +280,37 @@ func PrivateSha1SignData(signData string) (string, error) {
 		return "", err
 	}
 	return Base64Encode(signer), nil
+}
+
+func CloudAccountPackageSign(params map[string]string) (string, error) {
+	// 1. 筛选并排序
+	var keys []string
+	for k := range params {
+		if k != "sign" && params[k] != "" {
+			keys = append(keys, k)
+		}
+	}
+	sort.Strings(keys)
+
+	// 2. 拼接
+	var signStrings []string
+	for _, k := range keys {
+		signStrings = append(signStrings, fmt.Sprintf("%s=%s", k, params[k]))
+	}
+	signString := strings.Join(signStrings, "&")
+	fmt.Println("signString:" + string(signString))
+
+	// 3. 调用签名函数
+	hashed := sha1.Sum([]byte(signString))
+	signature, err := rsa.SignPKCS1v15(rand.Reader, certData.Private, crypto.SHA1, hashed[:])
+	if err != nil {
+		return "", err
+	}
+
+	// 4. base64 编码签名结果
+	signatureBase64 := base64.StdEncoding.EncodeToString(signature)
+
+	return signatureBase64, nil
 }
 
 // FormEncryptKey 云账户验签
