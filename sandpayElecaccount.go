@@ -56,21 +56,21 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 }
 
 // HttpBuildQuery url encode
-func HttpBuildQuery(params map[string]interface{}, keysToUrlDecode []string) string {
+func HttpBuildQuery(params map[string]interface{}, keysToUrlEncode []string) string {
 	qs := url.Values{}
 	for k, v := range params {
 		value := cast.ToString(v)
-		if shouldUrlDecode(k, keysToUrlDecode) {
-			decodedValue, _ := url.QueryUnescape(value)
-			value = decodedValue
+		if shouldUrlEncode(k, keysToUrlEncode) {
+			encodedValue := url.QueryEscape(value)
+			value = encodedValue
 		}
 		qs.Add(k, value)
 	}
 	return qs.Encode()
 }
 
-func shouldUrlDecode(key string, keysToUrlDecode []string) bool {
-	for _, k := range keysToUrlDecode {
+func shouldUrlEncode(key string, keysToUrlEncode []string) bool {
+	for _, k := range keysToUrlEncode {
 		if key == k {
 			return true
 		}
