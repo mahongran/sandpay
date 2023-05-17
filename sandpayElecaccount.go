@@ -13,8 +13,52 @@ import (
 	"github.com/mahongran/sandpay/util"
 	"io"
 	"log"
+	"net/url"
+	"sort"
 	"time"
 )
+
+// CloudAccountPackage 云账户封装版
+func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccountPackage) (string, error) {
+	var PayExtraMemberAccountOpening elecaccountRequest.PayExtraMemberAccountOpening
+	PayExtraMemberAccountOpening.UserId = params.UserId
+	PayExtraMemberAccountOpening.NickName = params.NickName
+	config := sandPay.Config
+	body := elecaccountRequest.CloudAccountPackage{}
+	body.Version = "10"
+	body.MerNo = config.MerId
+	body.CreateTime = time.Now().Format("20060102150405")
+	body.MerOrderNo = params.OrderId
+	body.OrderAmt = "0.11"
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+	body.CreateIp = params.CreateIp
+	body.PayExtra = PayExtraMemberAccountOpening
+	body.AccsplitFlag = "NO"
+	body.SignType = "RSA"
+	body.StoreId = "000000"
+	body.ExpireTime = params.ExpireTime
+	body.GoodsName = "开户"
+	body.ProductCode = elecaccountParams.MemberAccountOpening
+	body.ClearCycle = "3"
+	body.JumpScheme = "sandcash://scpay"
+	body.MetaOption = `[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}]` //固定值
+
+	dataMap := StructToMap(body)
+	sign, _ := pay.PrivateSha1SignData(FormatCheckParameter(dataMap))
+	dataMap["sign"] = sign
+	u := "https://faspay-oss.sandpay.com.cn/pay/h5/cloud?" + HttpBuildQuery(dataMap)
+	return u, nil
+}
+
+// urlencode
+func HttpBuildQuery(params map[string]string) string {
+	qs := url.Values{}
+	for k, v := range params {
+		qs.Add(k, v)
+	}
+	return qs.Encode()
+}
 
 // OneClickAccountOpening 云账户一键开户
 func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {
@@ -40,7 +84,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	dataMap := StructToMap(body)
 	dataMap["data"], _ = FormData(dataMap, key)
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
-	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
+	sign, _ := pay.PrivateSha1SignData(dataMap["data"])
 	dataMap["sign"] = sign
 	DataByte, _ := json.Marshal(dataMap)
 	fmt.Println("请求参数:" + string(DataByte))
@@ -94,15 +138,35 @@ func FormData(paraMap interface{}, keys string) (string, error) {
 	return encoded, nil
 }
 
-func StructToMap(p interface{}) (list map[string]interface{}) {
+func StructToMap(p interface{}) (list map[string]string) {
 	data, err := json.Marshal(p)
 	if err != nil {
 		return list
 	}
 	// Unmarshal JSON into map[string]interface{}
-	var m map[string]interface{}
+	var m map[string]string
 	if err := json.Unmarshal(data, &m); err != nil {
 		return list
 	}
 	return m
+}
+func FormatCheckParameter(list map[string]string) (str string) {
+	delete(list, "sign")
+	keys := make([]string, 0, len(list))
+	for key, v := range list {
+		if v == "" {
+			continue
+		}
+		keys = append(keys, key)
+	}
+
+	sort.Slice(keys, func(i, j int) bool {
+		return keys[i] < keys[j]
+	})
+
+	signDataJson, err := json.Marshal(keys)
+	if err != nil {
+		return
+	}
+	return string(signDataJson[:])
 }
