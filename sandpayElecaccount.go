@@ -33,19 +33,19 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	body.CreateTime = time.Now().Format("20060102150405")
 	body.MerOrderNo = params.OrderId
 	body.OrderAmt = "0.11"
-	body.NotifyUrl = url.QueryEscape(params.NotifyUrl)
-	body.FrontUrl = url.QueryEscape(params.FrontUrl)
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
 	body.CreateIp = strings.Replace(params.CreateIp, ".", "_", -1)
-	body.PayExtra = url.QueryEscape(string(PayExtraString))
+	body.PayExtra = string(PayExtraString)
 	body.AccsplitFlag = "NO"
 	body.SignType = "RSA"
 	body.StoreId = "000000"
 	body.ExpireTime = params.ExpireTime
-	body.GoodsName = url.QueryEscape("开户")
+	body.GoodsName = "开户"
 	body.ProductCode = elecaccountParams.MemberAccountOpening
 	body.ClearCycle = "3"
 	body.JumpScheme = "sandcash://scpay"
-	body.MetaOption = url.QueryEscape(`[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}]`) //固定值
+	body.MetaOption = `[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}]` //固定值
 
 	dataMap := StructToMapString(body)
 	sign, _ := pay.CloudAccountPackageSign(dataMap)
@@ -67,9 +67,9 @@ func HttpBuildQuery(params map[string]string, keysToUrlEncode []string) string {
 	var parts []string
 	for _, k := range keys {
 		value := cast.ToString(params[k])
-		//if shouldUrlEncode(k, keysToUrlEncode) {
-		//	value = url.QueryEscape(value)
-		//}
+		if shouldUrlEncode(k, keysToUrlEncode) {
+			value = url.QueryEscape(value)
+		}
 		part := url.QueryEscape(k) + "=" + value
 		parts = append(parts, part)
 	}

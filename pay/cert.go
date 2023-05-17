@@ -298,7 +298,7 @@ func CloudAccountPackageSign(params map[string]string) (string, error) {
 		signStrings = append(signStrings, fmt.Sprintf("%s=%s", k, params[k]))
 	}
 	signString := strings.Join(signStrings, "&")
-	fmt.Println("signString:" + string(signString))
+	fmt.Println("请求参数:" + string(signString))
 
 	// 3. 调用签名函数
 	hashed := sha1.Sum([]byte(signString))
