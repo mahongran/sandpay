@@ -11,6 +11,7 @@ import (
 	"github.com/mahongran/sandpay/pay/elecaccountParams"
 	"github.com/mahongran/sandpay/pay/elecaccountRequest"
 	"github.com/mahongran/sandpay/util"
+	"github.com/spf13/cast"
 	"io"
 	"log"
 	"net/url"
@@ -55,7 +56,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 func HttpBuildQuery(params map[string]interface{}) string {
 	qs := url.Values{}
 	for k, v := range params {
-		qs.Add(k, v.(string))
+		qs.Add(k, cast.ToString(v))
 	}
 	return qs.Encode()
 }
