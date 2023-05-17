@@ -46,9 +46,26 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	body.ClearCycle = "3"
 	body.JumpScheme = "sandcash://scpay"
 	body.MetaOption = `[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}]` //固定值
-
+	//参与验签的字段
+	keysToSign := []string{
+		"version",
+		"mer_no",
+		"mer_order_no",
+		"create_time",
+		"order_amt",
+		"notify_url",
+		"return_url",
+		"create_ip",
+		"pay_extra",
+		"accsplit_flag",
+		"sign_type",
+		"store_id",
+		"activity_no",
+		"benefit_amount",
+		"merch_extend_params",
+	}
 	dataMap := StructToMapString(body)
-	sign, _ := pay.CloudAccountPackageSign(dataMap)
+	sign, _ := pay.CloudAccountPackageSign(dataMap, keysToSign)
 	dataMap["sign"] = sign
 	//需要url decode 转码的key
 	keysToUrlDecode := []string{"goods_name", "notify_url", "return_url", "pay_extra", "meta_option", "extend", "merch_extend_params", "sign"}
@@ -186,24 +203,4 @@ func StructToMap(p interface{}) (list map[string]interface{}) {
 		return list
 	}
 	return m
-}
-func FormatCheckParameter(list map[string]interface{}) (str string) {
-	delete(list, "sign")
-	keys := make([]string, 0, len(list))
-	for key, v := range list {
-		if v == "" {
-			continue
-		}
-		keys = append(keys, key)
-	}
-
-	sort.Slice(keys, func(i, j int) bool {
-		return keys[i] < keys[j]
-	})
-
-	signDataJson, err := json.Marshal(keys)
-	if err != nil {
-		return
-	}
-	return string(signDataJson[:])
 }
