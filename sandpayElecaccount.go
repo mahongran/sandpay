@@ -51,11 +51,11 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	return u, nil
 }
 
-// urlencode
-func HttpBuildQuery(params map[string]string) string {
+// HttpBuildQuery urlencode
+func HttpBuildQuery(params map[string]interface{}) string {
 	qs := url.Values{}
 	for k, v := range params {
-		qs.Add(k, v)
+		qs.Add(k, v.(string))
 	}
 	return qs.Encode()
 }
@@ -84,7 +84,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	dataMap := StructToMap(body)
 	dataMap["data"], _ = FormData(dataMap, key)
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
-	sign, _ := pay.PrivateSha1SignData(dataMap["data"])
+	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
 	DataByte, _ := json.Marshal(dataMap)
 	fmt.Println("请求参数:" + string(DataByte))
@@ -138,19 +138,19 @@ func FormData(paraMap interface{}, keys string) (string, error) {
 	return encoded, nil
 }
 
-func StructToMap(p interface{}) (list map[string]string) {
+func StructToMap(p interface{}) (list map[string]interface{}) {
 	data, err := json.Marshal(p)
 	if err != nil {
 		return list
 	}
 	// Unmarshal JSON into map[string]interface{}
-	var m map[string]string
+	var m map[string]interface{}
 	if err := json.Unmarshal(data, &m); err != nil {
 		return list
 	}
 	return m
 }
-func FormatCheckParameter(list map[string]string) (str string) {
+func FormatCheckParameter(list map[string]interface{}) (str string) {
 	delete(list, "sign")
 	keys := make([]string, 0, len(list))
 	for key, v := range list {
