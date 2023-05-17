@@ -131,7 +131,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	dataMap["sign"] = sign
 	DataByte, _ := json.Marshal(dataMap)
 	fmt.Println("请求参数:" + string(DataByte))
-	resp, err := util.Do(config.CloudAccountApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
+	resp, err := util.Do(config.CloudAccountEncapsulationHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
 	if err != nil {
 		return "", err
 	}

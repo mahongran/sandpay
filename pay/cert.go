@@ -52,9 +52,12 @@ type Config struct {
 	// wind导出的加密证书地址
 	EncryptCertPath string
 	//API 网关地址
-	ApiHost             string
+	ApiHost string
+	//云账户 api
 	CloudAccountApiHost string
-	NotifyUrl           string
+	//封装版 api
+	CloudAccountEncapsulationHost string
+	NotifyUrl                     string
 }
 
 func LoadCertInfo(info *Config) (err error) {
