@@ -16,6 +16,7 @@ import (
 	"log"
 	"net/url"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -57,16 +58,23 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 
 // HttpBuildQuery url encode
 func HttpBuildQuery(params map[string]interface{}, keysToUrlEncode []string) string {
-	qs := url.Values{}
-	for k, v := range params {
-		value := cast.ToString(v)
-		if shouldUrlEncode(k, keysToUrlEncode) {
-			encodedValue := url.QueryEscape(value)
-			value = encodedValue
-		}
-		qs.Add(k, value)
+	keys := make([]string, 0, len(params))
+	for k := range params {
+		keys = append(keys, k)
 	}
-	return qs.Encode()
+	sort.Strings(keys)
+
+	var parts []string
+	for _, k := range keys {
+		value := cast.ToString(params[k])
+		if shouldUrlEncode(k, keysToUrlEncode) {
+			value = url.QueryEscape(value)
+		}
+		part := url.QueryEscape(k) + "=" + value
+		parts = append(parts, part)
+	}
+
+	return strings.Join(parts, "&")
 }
 
 func shouldUrlEncode(key string, keysToUrlEncode []string) bool {
