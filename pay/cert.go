@@ -287,7 +287,7 @@ func CloudAccountPackageSign(params map[string]string, keysToSign []string) (str
 	// 1. 筛选并排序
 	var keys []string
 	for k := range params {
-		if params[k] != "" && shouldSign(params[k], keysToSign) {
+		if params[k] != "" && shouldSign(k, keysToSign) {
 			keys = append(keys, k)
 		}
 	}
