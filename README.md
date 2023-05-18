@@ -12,6 +12,14 @@
   openssl x509 -in server.pem  -out server.crt
   openssl pkcs12 -in xxxx.pfx -clcerts -nokeys -out key.cert
 ```
+
+```go 
+        var config SandPayConfig
+	config.MerId = "xxxxxxxxxxxxx"      //商户号
+	config.PrivatePath = "you.key"      //私钥
+	config.CertPath = "you.cert"        //公钥
+	config.EncryptCertPath = "sand.cer" //杉德公钥
+```
 ###  在目录下生成server.key即为私钥文件.
 ###  在目录下生成server.crt即为公钥文件.
   
