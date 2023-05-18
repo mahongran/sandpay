@@ -123,7 +123,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	plaintext, _ := json.Marshal(dataMap)
 	log.Printf("秘钥：%v", key)
 	log.Printf("AES 加密前：%v", string(plaintext))
-	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(string(plaintext), key)
+	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
 	log.Printf("AES 加密后：%v", dataMap["data"])
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
