@@ -16,8 +16,8 @@
 ```go 
         var config SandPayConfig
 	config.MerId = "xxxxxxxxxxxxx"      //商户号
-	config.PrivatePath = "you.key"      //私钥
-	config.CertPath = "you.cert"        //公钥
+	config.PrivatePath = "server.key"      //私钥
+	config.CertPath = "key.cert"        //公钥
 	config.EncryptCertPath = "sand.cer" //杉德公钥
 ```
 ###  在目录下生成server.key即为私钥文件.
