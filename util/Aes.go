@@ -192,3 +192,67 @@ func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
 		dst = dst[x.blockSize:]
 	}
 }
+
+// AesEcbPkcs5PaddingDecrypt AES 解密
+func (s *SandAES) AesEcbPkcs5PaddingDecrypt(key, ciphertext string) (string, error) {
+	block, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return "", err
+	}
+	// 解码密文
+	decodedCiphertext, err := base64.StdEncoding.DecodeString(ciphertext)
+	if err != nil {
+		return "", err
+	}
+	// 解密
+	plaintext := make([]byte, len(decodedCiphertext))
+	decrypter := NewECBDecrypter(block)
+	decrypter.CryptBlocks(plaintext, decodedCiphertext)
+
+	// 去除填充
+	unpaddedPlaintext := pkcs5Unpadding(plaintext)
+
+	// 输出解密结果
+	return string(unpaddedPlaintext), nil
+}
+
+// PKCS#5去除填充
+func pkcs5Unpadding(data []byte) []byte {
+	length := len(data)
+	unpadding := int(data[length-1])
+	return data[:length-unpadding]
+}
+
+// 自定义ECB模式解密器
+type ecbDecrypter struct {
+	b         cipher.Block
+	blockSize int
+}
+
+func NewECBDecrypter(b cipher.Block) cipher.BlockMode {
+	return &ecbDecrypter{
+		b:         b,
+		blockSize: b.BlockSize(),
+	}
+}
+
+func (x *ecbDecrypter) BlockSize() int {
+	return x.blockSize
+}
+
+func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		fmt.Println("ciphertext length must be multiple of block size")
+		return
+	}
+	if len(dst) < len(src) {
+		fmt.Println("output smaller than input")
+		return
+	}
+
+	for len(src) > 0 {
+		x.b.Decrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
+}

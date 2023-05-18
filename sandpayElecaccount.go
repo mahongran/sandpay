@@ -127,17 +127,20 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
 	DataByte, _ := json.Marshal(dataMap)
-	//fmt.Println("请求参数:" + string(DataByte))
 	resp, err := util.Do(config.CloudAccountEncapsulationHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
 	if err != nil {
 		return "", err
 	}
+
 	d := make(map[string]interface{})
 	if err := json.Unmarshal(resp, &d); err != nil {
 		return "", err
 	}
-	//fmt.Println("杉德回调解析结果:" + string(resp))
-	return string(resp), nil
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
 }
 
 func StructToMapString(p interface{}) (list map[string]string) {
@@ -145,7 +148,6 @@ func StructToMapString(p interface{}) (list map[string]string) {
 	if err != nil {
 		return list
 	}
-	// Unmarshal JSON into map[string]interface{}
 	var m map[string]string
 	if err := json.Unmarshal(data, &m); err != nil {
 		return list
@@ -157,7 +159,6 @@ func StructToMap(p interface{}) (list map[string]interface{}) {
 	if err != nil {
 		return list
 	}
-	// Unmarshal JSON into map[string]interface{}
 	var m map[string]interface{}
 	if err := json.Unmarshal(data, &m); err != nil {
 		return list
