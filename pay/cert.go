@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"github.com/mahongran/sandpay/util"
 	"io/ioutil"
@@ -201,25 +202,6 @@ func LoadPublicKey(path string) (cert *x509.Certificate, err error) {
 	}
 	return
 }
-func NewPublicSha1Verify(signature, str string) (ok bool, err error) {
-
-	//log.Println("vals", vals)
-
-	hash := crypto.Hash.New(crypto.SHA1)
-	hash.Write([]byte(str))
-	hashed := hash.Sum(nil)
-
-	var inSign []byte
-	inSign, err1 := Base64Decode(signature)
-	if err1 != nil {
-		return false, fmt.Errorf("解析返回signature失败1 %v", err1)
-	}
-	err = rsa.VerifyPKCS1v15(certData.Public, crypto.SHA1, hashed, inSign)
-	if err != nil {
-		return false, fmt.Errorf("解析返回signature失败2 %v", err1)
-	}
-	return true, nil
-}
 
 // 返回数据验签
 func PublicSha1Verify(vals url.Values) (res interface{}, err error) {
@@ -320,4 +302,48 @@ func CloudAccountPackageSign(params map[string]string, keysToSign []string) (str
 // FormEncryptKey 云账户验签
 func FormEncryptKey(key string) (string, error) {
 	return util.RsaEncrypt(key, certData.Public)
+}
+
+// CloudAccountVerification 云账户验签
+func CloudAccountVerification(d map[string]interface{}) (string, error) {
+	data := d["data"].(string)
+	sign := d["sign"].(string)
+	encryptKey := d["encryptKey"].(string)
+	// step8: 使用公钥验签报文
+	ok, err := NewPublicSha1Verify(data, sign, certData.Public)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", errors.New("验签失败")
+	}
+	// step9: 使用私钥解密AESKey
+	decryptAESKey, err := util.RsaDecrypt(encryptKey, certData.Private)
+	if err != nil {
+		return "", err
+	}
+	sanDe := util.SandAES{}
+	//用key 解密 data 获得json
+	jsonString, err := sanDe.AesEcbPkcs5PaddingDecrypt(decryptAESKey, data)
+	if err != nil {
+		return "", err
+	}
+	return jsonString, nil
+}
+
+// NewPublicSha1Verify 验签
+func NewPublicSha1Verify(signature, str string, SandPublicKey *rsa.PublicKey) (ok bool, err error) {
+	hash := crypto.Hash.New(crypto.SHA1)
+	hash.Write([]byte(str))
+	hashed := hash.Sum(nil)
+	var inSign []byte
+	inSign, err1 := Base64Decode(signature)
+	if err1 != nil {
+		return false, fmt.Errorf("解析返回signature失败1 %v", err1)
+	}
+	err = rsa.VerifyPKCS1v15(SandPublicKey, crypto.SHA1, hashed, inSign)
+	if err != nil {
+		return false, fmt.Errorf("解析返回signature失败2" + err.Error())
+	}
+	return true, nil
 }
