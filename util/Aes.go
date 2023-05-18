@@ -104,7 +104,7 @@ func (s *SandAES) RandStr(n int) string {
 		strData.WriteString(str[index])
 	}
 	res := strData.String()
-	fmt.Println("AES随机数 16,24,32 位，否则报错:", res)
+	//fmt.Println("AES随机数 16,24,32 位，否则报错:", res)
 	return res
 }
 
@@ -132,4 +132,63 @@ func (s *SandAES) EcbDecrypt(data, key []byte) []byte {
 
 	b, _ := s.Pkcs7UnPadding(decrypted)
 	return b
+}
+
+// AesEcbPkcs5Padding AES ECB  Pkcs5Padding 加密
+func (s *SandAES) AesEcbPkcs5Padding(key, plaintext string) (string, error) {
+	block, err := aes.NewCipher([]byte(key))
+	if err != nil {
+		return "", err
+	}
+	// 使用PKCS#5填充明文
+	paddedPlaintext := pkcs5Padding([]byte(plaintext), block.BlockSize())
+
+	// 加密
+	ciphertext := make([]byte, len(paddedPlaintext))
+	encrypter := NewECBEncrypter(block)
+	encrypter.CryptBlocks(ciphertext, paddedPlaintext)
+
+	// 输出加密结果和密钥
+	return base64.StdEncoding.EncodeToString(ciphertext), nil
+}
+
+// PKCS#5填充
+func pkcs5Padding(data []byte, blockSize int) []byte {
+	padding := blockSize - len(data)%blockSize
+	padText := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(data, padText...)
+}
+
+// 自定义ECB模式加密器
+type ecbEncrypter struct {
+	b         cipher.Block
+	blockSize int
+}
+
+func NewECBEncrypter(b cipher.Block) cipher.BlockMode {
+	return &ecbEncrypter{
+		b:         b,
+		blockSize: b.BlockSize(),
+	}
+}
+
+func (x *ecbEncrypter) BlockSize() int {
+	return x.blockSize
+}
+
+func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		fmt.Println("ciphertext length must be multiple of block size")
+		return
+	}
+	if len(dst) < len(src) {
+		fmt.Println("output smaller than input")
+		return
+	}
+
+	for len(src) > 0 {
+		x.b.Encrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
 }
