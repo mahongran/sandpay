@@ -8,6 +8,7 @@ import (
 	"github.com/mahongran/sandpay/pay/elecaccountRequest"
 	"github.com/mahongran/sandpay/util"
 	"github.com/spf13/cast"
+	"log"
 	"net/url"
 	"sort"
 	"strings"
@@ -120,7 +121,10 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
 	plaintext, _ := json.Marshal(dataMap)
+	log.Printf("秘钥：%v", key)
+	log.Printf("AES 加密前：%v", string(plaintext))
 	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(string(plaintext), key)
+	log.Printf("AES 加密后：%v", dataMap["data"])
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
