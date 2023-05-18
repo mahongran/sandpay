@@ -2,6 +2,8 @@ package sandpay
 
 import (
 	"fmt"
+	"net/url"
+	"strings"
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
@@ -351,6 +353,31 @@ func (sandPay *SandPay) OrderRefunds(refundParams params.OrderRefundParams, chan
 	return resp, err
 }
 
+// queryString 回调参数校验
+func NotifyVerifyData(dataString string) (response response.Response, err error) {
+	var fields []string
+	fields = strings.Split(dataString, "&")
+
+	vals := url.Values{}
+	for _, field := range fields {
+		f := strings.SplitN(field, "=", 2)
+		if len(f) >= 2 {
+			key, val := f[0], f[1]
+			vals.Set(key, val)
+		}
+	}
+
+	result, err := pay.PublicSha1Verify(vals)
+
+	if err != nil {
+		return response, err
+	}
+	mapInfo := result.(map[string]string)
+	for key, value := range mapInfo {
+		response.SetKeyValue(key, value)
+	}
+	return response, err
+}
 func (sandPay *SandPay) ReAutoNotice(orderCode, noticeType string) (response response.Response, err error) {
 	config := sandPay.Config
 	timeString := time.Now().Format("20060102150405")
@@ -377,6 +404,14 @@ func (sandPay *SandPay) ReAutoNotice(orderCode, noticeType string) (response res
 	}
 	response.SetData(data.Data)
 	return response, err
+}
+
+// NewNotifyVerifyData 回调参数校验 测试软件包更新
+func NewNotifyVerifyData(sign, data string) (ok bool, err error) {
+
+	ok, err = pay.NewPublicSha1Verify(sign, data)
+
+	return ok, err
 }
 
 // 聚合统一下单快捷支付接口

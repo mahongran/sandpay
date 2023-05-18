@@ -298,6 +298,25 @@ func CloudAccountPackageSign(params map[string]string, keysToSign []string) (str
 
 	return signatureBase64, nil
 }
+func NewPublicSha1Verify(signature, str string) (ok bool, err error) {
+
+	//log.Println("vals", vals)
+
+	hash := crypto.Hash.New(crypto.SHA1)
+	hash.Write([]byte(str))
+	hashed := hash.Sum(nil)
+
+	var inSign []byte
+	inSign, err1 := Base64Decode(signature)
+	if err1 != nil {
+		return false, fmt.Errorf("解析返回signature失败1 %v", err1)
+	}
+	err = rsa.VerifyPKCS1v15(certData.Public, crypto.SHA1, hashed, inSign)
+	if err != nil {
+		return false, fmt.Errorf("解析返回signature失败2 %v", err1)
+	}
+	return true, nil
+}
 
 // FormEncryptKey 云账户验签
 func FormEncryptKey(key string) (string, error) {
@@ -310,7 +329,7 @@ func CloudAccountVerification(d map[string]interface{}) (string, error) {
 	sign := d["sign"].(string)
 	encryptKey := d["encryptKey"].(string)
 	// step8: 使用公钥验签报文
-	ok, err := NewPublicSha1Verify(data, sign, certData.Public)
+	ok, err := NewPublicSha1Verify1(data, sign, certData.Public)
 	if err != nil {
 		return "", err
 	}
@@ -332,7 +351,7 @@ func CloudAccountVerification(d map[string]interface{}) (string, error) {
 }
 
 // NewPublicSha1Verify 验签
-func NewPublicSha1Verify(signature, str string, SandPublicKey *rsa.PublicKey) (ok bool, err error) {
+func NewPublicSha1Verify1(signature, str string, SandPublicKey *rsa.PublicKey) (ok bool, err error) {
 	hash := crypto.Hash.New(crypto.SHA1)
 	hash.Write([]byte(str))
 	hashed := hash.Sum(nil)
