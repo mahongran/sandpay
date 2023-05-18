@@ -78,7 +78,7 @@ func (sandPay *SandPay) OrderPayQr(params params.OrderPayParams) (resp response.
 	}
 
 	signDataJsonString := pay.GenerateSignString(body, header)
-	fmt.Println(signDataJsonString)
+	//fmt.Println(signDataJsonString)
 	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
 	postData := pay.GeneratePostData(signDataJsonString, sign)
 

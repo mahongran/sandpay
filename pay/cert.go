@@ -273,7 +273,7 @@ func PrivateSha1SignData(signData string) (string, error) {
 	signer, err := rsa.SignPKCS1v15(rand.Reader, certData.Private,
 		crypto.SHA1, hashed)
 	if err != nil {
-		fmt.Println("PrivateSha1SignData Error  from signing: %s\n", err)
+		//fmt.Println("PrivateSha1SignData Error  from signing: %s\n", err)
 		return "", err
 	}
 	return Base64Encode(signer), nil
@@ -302,7 +302,7 @@ func CloudAccountPackageSign(params map[string]string, keysToSign []string) (str
 		signStrings = append(signStrings, fmt.Sprintf("%s=%s", k, params[k]))
 	}
 	signString := strings.Join(signStrings, "&")
-	fmt.Println("请求参数:" + string(signString))
+	//fmt.Println("请求参数:" + string(signString))
 
 	// 3. 调用签名函数
 	hashed := sha1.Sum([]byte(signString))

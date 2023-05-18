@@ -2,13 +2,11 @@ package sandpay
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/mahongran/sandpay/pay"
 	"github.com/mahongran/sandpay/pay/elecaccountParams"
 	"github.com/mahongran/sandpay/pay/elecaccountRequest"
 	"github.com/mahongran/sandpay/util"
 	"github.com/spf13/cast"
-	"log"
 	"net/url"
 	"sort"
 	"strings"
@@ -121,15 +119,15 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
 	plaintext, _ := json.Marshal(dataMap)
-	log.Printf("秘钥：%v", key)
-	log.Printf("AES 加密前：%v", string(plaintext))
+	//log.Printf("秘钥：%v", key)
+	//log.Printf("AES 加密前：%v", string(plaintext))
 	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
-	log.Printf("AES 加密后：%v", dataMap["data"])
+	//log.Printf("AES 加密后：%v", dataMap["data"])
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
 	DataByte, _ := json.Marshal(dataMap)
-	fmt.Println("请求参数:" + string(DataByte))
+	//fmt.Println("请求参数:" + string(DataByte))
 	resp, err := util.Do(config.CloudAccountEncapsulationHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
 	if err != nil {
 		return "", err
@@ -138,7 +136,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	if err := json.Unmarshal(resp, &d); err != nil {
 		return "", err
 	}
-	fmt.Println("杉德回调解析结果:" + string(resp))
+	//fmt.Println("杉德回调解析结果:" + string(resp))
 	return string(resp), nil
 }
 

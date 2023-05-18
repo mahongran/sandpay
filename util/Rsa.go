@@ -4,17 +4,16 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"encoding/base64"
-	"log"
 )
 
 func RsaEncrypt(value string, rsaPublicKey *rsa.PublicKey) (string, error) {
-	log.Printf("RSA 加密前：%v", value)
+	//log.Printf("RSA 加密前：%v", value)
 	buffer, err := rsa.EncryptPKCS1v15(rand.Reader, rsaPublicKey, []byte(value))
 	if err != nil {
 		return "", err
 	}
 	s := base64.StdEncoding.EncodeToString(buffer)
-	log.Printf("RSA 加密后：%v", s)
+	//log.Printf("RSA 加密后：%v", s)
 
 	return s, nil
 }
