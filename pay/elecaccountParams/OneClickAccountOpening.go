@@ -45,4 +45,12 @@ type CloudAccountPackage struct {
 	FrontUrl string `json:"frontUrl"`
 	//ip
 	CreateIp string `json:"createIp"`
+	//订单金额
+	OrderAmt string `json:"order_amt"`
+	//商品名称
+	GoodsName string `json:"goods_name"`
+	//产品编码 https://www.yuque.com/sd_cw/xfq1vq/ut7292#jm1IE
+	ProductCode string `json:"product_code"`
+	//支付扩展域
+	PayExtra string `json:"pay_extra"`
 }

@@ -15,27 +15,23 @@ import (
 
 // CloudAccountPackage 云账户封装版
 func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccountPackage) (string, error) {
-	var PayExtraMemberAccountOpening elecaccountRequest.PayExtraMemberAccountOpening
-	PayExtraMemberAccountOpening.UserId = params.UserId
-	PayExtraMemberAccountOpening.NickName = params.NickName
-	PayExtraString, _ := json.Marshal(&PayExtraMemberAccountOpening)
 	config := sandPay.Config
 	body := elecaccountRequest.CloudAccountPackage{}
 	body.Version = "10"
 	body.MerNo = config.MerId
 	body.CreateTime = time.Now().Format("20060102150405")
 	body.MerOrderNo = params.OrderId
-	body.OrderAmt = "0.11"
+	body.OrderAmt = params.OrderAmt
 	body.NotifyUrl = params.NotifyUrl
 	body.FrontUrl = params.FrontUrl
 	body.CreateIp = strings.Replace(params.CreateIp, ".", "_", -1)
-	body.PayExtra = string(PayExtraString)
+	body.PayExtra = params.PayExtra
 	body.AccsplitFlag = "NO"
 	body.SignType = "RSA"
 	body.StoreId = "000000"
 	body.ExpireTime = params.ExpireTime
-	body.GoodsName = "开户"
-	body.ProductCode = elecaccountParams.MemberAccountOpening
+	body.GoodsName = params.GoodsName
+	body.ProductCode = params.ProductCode
 	body.ClearCycle = "3"
 	body.JumpScheme = "sandcash://scpay"
 	body.MetaOption = `[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}]` //固定值
