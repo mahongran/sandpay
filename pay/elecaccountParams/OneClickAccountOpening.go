@@ -35,10 +35,6 @@ type OneClickAccountOpening struct {
 type CloudAccountPackage struct {
 	//商户号下每次请求的唯一流水号
 	OrderId string `json:"orderId"`
-	//用户在商户系统中的唯一编号
-	UserId string `json:"userId"`
-	//会员昵称
-	NickName string `json:"nickName"`
 	//yyyyMMddHHmmss 例20180813142415，建议设置0.5～1小时
 	ExpireTime string `json:"expireTime"`
 	//异步通知地址
