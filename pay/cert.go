@@ -33,6 +33,12 @@ type Cert struct {
 	Public *rsa.PublicKey
 	// 加密公钥ID
 	EncryptId string
+	// 加密证书 pro
+	ProEncryptCert *x509.Certificate
+	// pro 公钥 云账户账户侧加密验签使用
+	ProPublic *rsa.PublicKey
+	// 加密pro公钥ID
+	ProEncryptId string
 }
 
 //初始使用的配置
@@ -50,8 +56,10 @@ type Config struct {
 	// 验签证书地址,传入pfx此路径可以不传
 	// openssl pkcs12 -in xxxx.pfx -clcerts -nokeys -out key.cert
 	CertPath string
-	// wind导出的加密证书地址
+	// 杉德公钥
 	EncryptCertPath string
+	// 杉德pro公钥
+	ProEncryptCertPath string
 	//API 网关地址
 	ApiHost string
 	//云账户 api
@@ -70,6 +78,13 @@ func LoadCertInfo(info *Config) (err error) {
 	}
 	certData.EncryptId = fmt.Sprintf("%v", certData.EncryptCert.SerialNumber)
 	certData.Public = certData.EncryptCert.PublicKey.(*rsa.PublicKey)
+	certData.ProEncryptCert, err = LoadPublicKey(info.ProEncryptCertPath)
+	if err != nil {
+		err = fmt.Errorf("ProEncryptCert ERR:%v", err)
+		return
+	}
+	certData.ProEncryptId = fmt.Sprintf("%v", certData.ProEncryptCert.SerialNumber)
+	certData.ProPublic = certData.ProEncryptCert.PublicKey.(*rsa.PublicKey)
 	//log.Println("	certData.Public", certData.Public)
 	certData.Private, err = ParsePrivateFromFile(info.PrivatePath)
 	//log.Println("certData.Private", certData.Private)
@@ -318,9 +333,9 @@ func NewPublicSha1Verify(signature, str string) (ok bool, err error) {
 	return true, nil
 }
 
-// FormEncryptKey 云账户验签
+// FormEncryptKey 云账户加签
 func FormEncryptKey(key string) (string, error) {
-	return util.RsaEncrypt(key, certData.Public)
+	return util.RsaEncrypt(key, certData.ProPublic)
 }
 
 // CloudAccountVerification 云账户验签
@@ -329,7 +344,7 @@ func CloudAccountVerification(d map[string]interface{}) (string, error) {
 	sign := d["sign"].(string)
 	encryptKey := d["encryptKey"].(string)
 	// step8: 使用公钥验签报文
-	ok, err := NewPublicSha1Verify1(data, sign, certData.Public)
+	ok, err := NewPublicSha1Verify1(data, sign, certData.ProPublic)
 	if err != nil {
 		return "", err
 	}
