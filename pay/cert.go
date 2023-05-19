@@ -62,11 +62,8 @@ type Config struct {
 	ProEncryptCertPath string
 	//API 网关地址
 	ApiHost string
-	//云账户 api
-	CloudAccountApiHost string
-	//封装版 api
-	CloudAccountEncapsulationHost string
-	NotifyUrl                     string
+
+	NotifyUrl string
 }
 
 func LoadCertInfo(info *Config) (err error) {

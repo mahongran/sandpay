@@ -27,6 +27,8 @@ type OneClickAccountOpening struct {
 	NotifyUrl string `json:"notifyUrl"`
 	//前台通知地址
 	FrontUrl string `json:"frontUrl"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
 }
 
 // CloudAccountPackage 云账户封装版请求参数
