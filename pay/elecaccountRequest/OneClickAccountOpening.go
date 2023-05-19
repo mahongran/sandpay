@@ -38,7 +38,7 @@ type CloudAccountPackage struct {
 	Sign         string `json:"sign"`          //MD5签名结果
 	JumpScheme   string `json:"jump_scheme"`   //没有就填默认值  `sandcash://scpay`    此参数是安卓支付宝SDK跳转所需参数，如自定义，需要和客户端工程配置保持一致，例： android:scheme = "aaa"，android:host = "bbb"，jump_scheme 需填“aaa://bbb”。
 	MetaOption   string `json:"meta_option"`   //[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}] //固定值
-
+	Extends      string `json:"extend"`
 }
 
 // PayExtraMemberAccountOpening 支付扩展域用户开户

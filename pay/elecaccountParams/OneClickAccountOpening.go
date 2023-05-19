@@ -53,4 +53,6 @@ type CloudAccountPackage struct {
 	ProductCode string `json:"product_code"`
 	//支付扩展域
 	PayExtra string `json:"pay_extra"`
+	//扩展域
+	Extends string `json:"extends"`
 }
