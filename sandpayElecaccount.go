@@ -58,7 +58,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	dataMap["sign"] = sign
 	//需要url decode 转码的key
 	keysToUrlDecode := []string{"goods_name", "notify_url", "return_url", "pay_extra", "meta_option", "extend", "merch_extend_params", "sign"}
-	u := config.CloudAccountApiHost + "?" + HttpBuildQuery(dataMap, keysToUrlDecode)
+	u := params.ApiHost + "?" + HttpBuildQuery(dataMap, keysToUrlDecode)
 	return u, nil
 }
 

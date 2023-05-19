@@ -41,6 +41,8 @@ type CloudAccountPackage struct {
 	ExpireTime string `json:"expireTime"`
 	//异步通知地址
 	NotifyUrl string `json:"notifyUrl"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
 	//前台通知地址
 	FrontUrl string `json:"frontUrl"`
 	//ip
