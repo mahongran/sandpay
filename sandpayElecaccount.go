@@ -16,22 +16,21 @@ import (
 // CloudAccountTransfer 转账（企业转个人）
 func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.OneClickAccountOpening) (string, error) {
 	config := sandPay.Config
-	body := elecaccountRequest.OneClickAccountOpening{
-		Mid:             config.MerId,
-		SignType:        "SHA1WithRSA",
-		EncryptType:     "AES",
-		Version:         "1.0.0",
-		Timestamp:       time.Now().Format("2006-01-02 15:04:05"),
-		CustomerOrderNo: params.CustomerOrderNo,
-		BizUserNo:       params.BizUserNo,
-		NickName:        params.NickName,
-		Name:            params.Name,
-		IdType:          params.IdType,
-		IdNo:            params.IdNo,
-		Mobile:          params.Mobile,
-		NotifyUrl:       params.NotifyUrl,
-		FrontUrl:        params.FrontUrl,
-	}
+	var body elecaccountRequest.OneClickAccountOpening
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.NickName = params.NickName
+	body.Name = params.Name
+	body.IdType = params.IdType
+	body.IdNo = params.IdNo
+	body.Mobile = params.Mobile
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
 	sanDe := util.SandAES{}
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
@@ -142,22 +141,21 @@ func shouldUrlEncode(key string, keysToUrlEncode []string) bool {
 // OneClickAccountOpening 云账户一键开户
 func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {
 	config := sandPay.Config
-	body := elecaccountRequest.OneClickAccountOpening{
-		Mid:             config.MerId,
-		SignType:        "SHA1WithRSA",
-		EncryptType:     "AES",
-		Version:         "1.0.0",
-		Timestamp:       time.Now().Format("2006-01-02 15:04:05"),
-		CustomerOrderNo: params.CustomerOrderNo,
-		BizUserNo:       params.BizUserNo,
-		NickName:        params.NickName,
-		Name:            params.Name,
-		IdType:          params.IdType,
-		IdNo:            params.IdNo,
-		Mobile:          params.Mobile,
-		NotifyUrl:       params.NotifyUrl,
-		FrontUrl:        params.FrontUrl,
-	}
+	var body elecaccountRequest.OneClickAccountOpening
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.NickName = params.NickName
+	body.Name = params.Name
+	body.IdType = params.IdType
+	body.IdNo = params.IdNo
+	body.Mobile = params.Mobile
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
 	sanDe := util.SandAES{}
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
