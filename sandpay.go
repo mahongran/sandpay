@@ -295,6 +295,34 @@ func (sandPay *SandPay) OrderQuery(orderNo, extend, channelType, productId strin
 	return resp, err
 }
 
+//CloudAccountOrderRefund 杉德云账户申请退款
+func (sandPay *SandPay) CloudAccountOrderRefund(refundParams params.OrderRefundParams, channelType, productId string) (resp response.OrderRefundResponse, err error) {
+	config := sandPay.Config
+	timeString := time.Now().Format("20060102150405")
+
+	header := request.Header{}
+	header.SetMethod(`sandpay.trade.refund`).SetVersion(`1.0`).SetAccessType("1")
+	header.SetChannelType(channelType).SetMid(config.MerId).SetProductId(productId).SetReqTime(timeString)
+	body := request.OrderRefundBody{
+		OrderCode:    refundParams.OrderNo,
+		OriOrderCode: refundParams.RefundNO,
+		RefundAmount: refundParams.GetRefundAmount(),
+		NotifyUrl:    config.NotifyUrl,
+		RefundReason: refundParams.RefundReason,
+		Extends:      refundParams.Extends,
+	}
+
+	signDataJsonString := pay.GenerateSignString(body, header)
+	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
+	postData := pay.GeneratePostData(signDataJsonString, sign)
+	data, err := pay.PayPost(config.ApiHost+"/gw/api/order/refund", postData)
+	if err != nil {
+		return
+	}
+	resp.SetData(data.Data)
+	return resp, err
+}
+
 // 退货申请接口
 func (sandPay *SandPay) OrderRefund(refundParams params.OrderRefundParams, channelType, productId string) (resp response.OrderRefundResponse, err error) {
 	config := sandPay.Config
@@ -344,7 +372,6 @@ func (sandPay *SandPay) OrderRefunds(refundParams params.OrderRefundParams, chan
 	signDataJsonString := pay.GenerateSignString(body, header)
 	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
 	postData := pay.GeneratePostData(signDataJsonString, sign)
-	spew.Dump(postData)
 	data, err := pay.PayPost(config.ApiHost+"/order/refund", postData)
 	if err != nil {
 		return
