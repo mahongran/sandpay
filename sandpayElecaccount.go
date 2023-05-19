@@ -13,6 +13,53 @@ import (
 	"time"
 )
 
+// CloudAccountTransfer 转账（企业转个人）
+func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.OneClickAccountOpening) (string, error) {
+	config := sandPay.Config
+	body := elecaccountRequest.OneClickAccountOpening{
+		Mid:             config.MerId,
+		SignType:        "SHA1WithRSA",
+		EncryptType:     "AES",
+		Version:         "1.0.0",
+		Timestamp:       time.Now().Format("2006-01-02 15:04:05"),
+		CustomerOrderNo: params.CustomerOrderNo,
+		BizUserNo:       params.BizUserNo,
+		NickName:        params.NickName,
+		Name:            params.Name,
+		IdType:          params.IdType,
+		IdNo:            params.IdNo,
+		Mobile:          params.Mobile,
+		NotifyUrl:       params.NotifyUrl,
+		FrontUrl:        params.FrontUrl,
+	}
+	sanDe := util.SandAES{}
+	key := sanDe.RandStr(16)
+	dataMap := StructToMap(body)
+	plaintext, _ := json.Marshal(dataMap)
+	//log.Printf("秘钥：%v", key)
+	//log.Printf("AES 加密前：%v", string(plaintext))
+	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
+	//log.Printf("AES 加密后：%v", dataMap["data"])
+	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
+	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
+	dataMap["sign"] = sign
+	DataByte, _ := json.Marshal(dataMap)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
+	if err != nil {
+		return "", err
+	}
+
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // CloudAccountPackage 云账户封装版
 func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccountPackage) (string, error) {
 	config := sandPay.Config
