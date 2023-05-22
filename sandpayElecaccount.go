@@ -7,6 +7,7 @@ import (
 	"github.com/mahongran/sandpay/pay/elecaccountRequest"
 	"github.com/mahongran/sandpay/util"
 	"github.com/spf13/cast"
+	"log"
 	"net/url"
 	"sort"
 	"strings"
@@ -49,7 +50,7 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	if err != nil {
 		return "", err
 	}
-
+	log.Printf("返回数据：%v", resp)
 	d := make(map[string]interface{})
 	if err := json.Unmarshal(resp, &d); err != nil {
 		return "", err
