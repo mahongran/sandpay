@@ -362,7 +362,7 @@ func CloudAccountVerification(d map[string]interface{}) (string, error) {
 	sign := d["sign"].(string)
 	encryptKey := d["encryptKey"].(string)
 	// step8: 使用公钥验签报文
-	ok, err := NewPublicSha1Verify1(data, sign, certData.ProPublic)
+	ok, err := NewPublicSha1Verify1(data, sign, certData.Public)
 	if err != nil {
 		return "", err
 	}
