@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"github.com/mahongran/sandpay/util"
 	"io/ioutil"
-	"log"
 	"net/url"
 	"sort"
 	"strings"
@@ -363,7 +362,7 @@ func CloudAccountVerification(d map[string]interface{}) (string, error) {
 	sign := d["sign"].(string)
 	encryptKey := d["encryptKey"].(string)
 	// step8: 使用公钥验签报文
-	ok, err := NewPublicSha1Verify1(data, sign, certData.ProPublic)
+	ok, err := NewPublicSha1Verify1(sign, data, certData.ProPublic)
 	if err != nil {
 		return "", err
 	}
@@ -386,10 +385,6 @@ func CloudAccountVerification(d map[string]interface{}) (string, error) {
 
 // NewPublicSha1Verify 验签
 func NewPublicSha1Verify1(signature, str string, SandPublicKey *rsa.PublicKey) (ok bool, err error) {
-	log.Println("signature", signature)
-	log.Println("str", str)
-	log.Println("SandPublicKey", SandPublicKey == nil)
-
 	hash := crypto.Hash.New(crypto.SHA1)
 	hash.Write([]byte(str))
 	hashed := hash.Sum(nil)
