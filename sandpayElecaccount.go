@@ -46,6 +46,7 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
 	DataByte, _ := json.Marshal(dataMap)
+	log.Printf("请求参数：%v", string(DataByte))
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.corp.transfer", string(DataByte))
 	if err != nil {
 		return "", err
