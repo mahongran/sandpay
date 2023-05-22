@@ -50,7 +50,7 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	if err != nil {
 		return "", err
 	}
-	log.Println(resp)
+	log.Println(string(resp))
 	d := make(map[string]interface{})
 	if err := json.Unmarshal(resp, &d); err != nil {
 		return "", err
