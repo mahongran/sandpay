@@ -71,8 +71,20 @@ type CloudAccountPackage struct {
 	Extends      string `json:"extend"`
 }
 
-// PayExtraMemberAccountOpening 支付扩展域用户开户
+// PayExtraMemberAccountOpening 支付扩展域用户开户 || C2B
 type PayExtraMemberAccountOpening struct {
 	UserId   string `json:"userId"`
 	NickName string `json:"nickName"`
+}
+
+// PayExtraOpeningC2C 支付扩展域  C2C
+type PayExtraOpeningC2C struct {
+	OperationType  string `json:"operationType"`  //1:转账申请
+	RecvUserId     string `json:"recvUserId"`     //收款方会员编号
+	Remark         string `json:"remark"`         //备注
+	BizType        string `json:"bizType"`        //转账类型, //必填 1：转账确认模式 2：实时转账模式
+	PayUserId      string `json:"payUserId"`      //付款方会员编号，用户在商户系统中的唯一编号
+	UserFeeAmt     string `json:"userFeeAmt"`     //用户服务费，商户向用户收取的服务费  元
+	Postscript     string `json:"postscript"`     //附言
+	ReceiveTimeOut string `json:"receiveTimeOut"` //超时回退时间，bizType为1时生效，格式：yyyyMMddHHmmss（默认7天，最大支持7天）
 }
