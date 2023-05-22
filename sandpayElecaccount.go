@@ -18,10 +18,6 @@ import (
 func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccountTransferParams) (string, error) {
 	config := sandPay.Config
 	var body elecaccountRequest.CloudAccountTransferRequest
-	var PayeeJSONObject elecaccountRequest.PayeeJSONObject
-	PayeeJSONObject.Name = params.Name
-	PayeeJSONObject.BizUserNo = params.BizUserNo
-	Payee, _ := json.Marshal(&PayeeJSONObject)
 	body.Mid = config.MerId
 	body.SignType = "SHA1WithRSA"
 	body.EncryptType = "AES"
@@ -30,7 +26,12 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	body.CustomerOrderNo = params.CustomerOrderNo
 	body.AccountType = params.AccountType
 	body.OrderAmt = params.OrderAmt
-	body.Payee = string(Payee)
+	//收款方信息
+	var PayeeJSONObject elecaccountRequest.PayeeJSONObject
+	PayeeJSONObject.Name = params.Name
+	PayeeJSONObject.BizUserNo = params.BizUserNo
+	body.Payee = PayeeJSONObject
+
 	body.Postscript = params.Postscript
 	body.Remark = params.Remark
 	body.NotifyUrl = params.NotifyUrl

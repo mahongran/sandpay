@@ -32,7 +32,7 @@ type CloudAccountTransferRequest struct {
 	//转账金额 元
 	OrderAmt string `json:"orderAmt"`
 	//收款方
-	Payee string `json:"payee"`
+	Payee PayeeJSONObject `json:"payee"`
 	//附言
 	Postscript string `json:"postscript"`
 	//备注
