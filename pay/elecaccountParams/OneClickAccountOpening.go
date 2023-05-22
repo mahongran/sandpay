@@ -7,6 +7,26 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+//CloudAccountTransferParams 云账户转账（企业转个人）
+type CloudAccountTransferParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//账户类型01：支付电子户  02：宝易付权益电子户
+	AccountType string `json:"accountType"`
+	//转账金额 元
+	OrderAmt string `json:"orderAmt"`
+	//收款方
+	Payee string `json:"payee"`
+	//附言
+	Postscript string `json:"postscript"`
+	//备注
+	Remark string `json:"备注"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+	//异步通知地址
+	NotifyUrl string `json:"notifyUrl"`
+}
+
 //OneClickAccountOpening 云账户支付参数定义
 type OneClickAccountOpening struct {
 	//商户号下每次请求的唯一流水号

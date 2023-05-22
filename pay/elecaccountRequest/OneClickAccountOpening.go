@@ -12,6 +12,8 @@ type CloudAccountCommon struct {
 	EncryptKey      string `json:"encryptKey"`      //加密key
 	Data            string `json:"data"`            //报文体
 }
+
+// OneClickAccountOpening 一键开户
 type OneClickAccountOpening struct {
 	CloudAccountCommon
 	BizUserNo string `json:"bizUserNo"` //用户在商户系统中的唯一编号
@@ -22,6 +24,27 @@ type OneClickAccountOpening struct {
 	Mobile    string `json:"mobile"`    //会员手机号
 	NotifyUrl string `json:"notifyUrl"` //异步通知地址
 	FrontUrl  string `json:"frontUrl"`  //前台通知地址
+}
+type CloudAccountTransferRequest struct {
+	CloudAccountCommon
+	//账户类型01：支付电子户  02：宝易付权益电子户
+	AccountType string `json:"accountType"`
+	//转账金额 元
+	OrderAmt string `json:"orderAmt"`
+	//收款方
+	Payee string `json:"payee"`
+	//附言
+	Postscript string `json:"postscript"`
+	//备注
+	Remark string `json:"remark"`
+	//异步通知地址
+	NotifyUrl string `json:"notifyUrl"`
+}
+
+// PayeeJSONObject 收款方信息
+type PayeeJSONObject struct {
+	BizUserNo string `json:"bizUserNo"`
+	Name      string `json:"name"`
 }
 
 // CloudAccountPackage 云账户封装版

@@ -14,23 +14,21 @@ import (
 )
 
 // CloudAccountTransfer 转账（企业转个人）
-func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.OneClickAccountOpening) (string, error) {
+func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccountTransferParams) (string, error) {
 	config := sandPay.Config
-	var body elecaccountRequest.OneClickAccountOpening
+	var body elecaccountRequest.CloudAccountTransferRequest
 	body.Mid = config.MerId
 	body.SignType = "SHA1WithRSA"
 	body.EncryptType = "AES"
 	body.Version = "1.0.0"
 	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
 	body.CustomerOrderNo = params.CustomerOrderNo
-	body.BizUserNo = params.BizUserNo
-	body.NickName = params.NickName
-	body.Name = params.Name
-	body.IdType = params.IdType
-	body.IdNo = params.IdNo
-	body.Mobile = params.Mobile
+	body.AccountType = params.AccountType
+	body.OrderAmt = params.OrderAmt
+	body.Payee = params.Payee
+	body.Postscript = params.Postscript
+	body.Remark = params.Remark
 	body.NotifyUrl = params.NotifyUrl
-	body.FrontUrl = params.FrontUrl
 	sanDe := util.SandAES{}
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
