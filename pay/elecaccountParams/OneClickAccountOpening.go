@@ -15,8 +15,10 @@ type CloudAccountTransferParams struct {
 	AccountType string `json:"accountType"`
 	//转账金额 元
 	OrderAmt string `json:"orderAmt"`
-	//收款方
-	Payee string `json:"payee"`
+	//收款方 用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//收款方姓名
+	Name string `json:"string"`
 	//附言
 	Postscript string `json:"postscript"`
 	//备注
