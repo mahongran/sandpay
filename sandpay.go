@@ -304,12 +304,13 @@ func (sandPay *SandPay) CloudAccountOrderRefund(refundParams params.OrderRefundP
 	header.SetMethod(`sandpay.trade.refund`).SetVersion(`1.0`).SetAccessType("1")
 	header.SetChannelType(channelType).SetMid(config.MerId).SetProductId(productId).SetReqTime(timeString)
 	body := request.OrderRefundBody{
-		OrderCode:    refundParams.OrderNo,
-		OriOrderCode: refundParams.RefundNO,
-		RefundAmount: refundParams.GetRefundAmount(),
-		NotifyUrl:    config.NotifyUrl,
-		RefundReason: refundParams.RefundReason,
-		Extends:      refundParams.Extends,
+		OrderCode:        refundParams.OrderNo,
+		OriOrderCode:     refundParams.RefundNO,
+		RefundAmount:     refundParams.GetRefundAmount(),
+		RefundAccountAmt: refundParams.GetRefundAmount(),
+		NotifyUrl:        config.NotifyUrl,
+		RefundReason:     refundParams.RefundReason,
+		Extends:          refundParams.Extends,
 	}
 
 	signDataJsonString := pay.GenerateSignString(body, header)
