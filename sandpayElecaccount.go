@@ -83,6 +83,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 	body.ExpireTime = params.ExpireTime
 	body.GoodsName = params.GoodsName
 	body.ProductCode = params.ProductCode
+	body.Extends = params.Extends
 	body.ClearCycle = "3"
 	body.JumpScheme = "sandcash://scpay"
 	body.MetaOption = `[{"s":"Android","n":"","id":"","sc":""},{"s":"IOS","n":"","id":"","sc":""}]` //固定值
