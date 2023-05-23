@@ -103,6 +103,7 @@ func (sandPay *SandPay) CloudAccountPackage(params elecaccountParams.CloudAccoun
 		"store_id",
 		"activity_no",
 		"benefit_amount",
+		"extend",
 		"merch_extend_params",
 	}
 	dataMap := StructToMapString(body)
