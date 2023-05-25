@@ -14,6 +14,44 @@ import (
 	"time"
 )
 
+// CloudAccountUserInfo 云账户用户信息详情
+func (sandPay *SandPay) CloudAccountUserInfo(params elecaccountParams.CloudAccountUserInfoParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.CloudAccountUserInfoRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+
+	sanDe := util.SandAES{}
+	key := sanDe.RandStr(16)
+	dataMap := StructToMap(body)
+	plaintext, _ := json.Marshal(dataMap)
+	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
+	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
+	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
+	dataMap["sign"] = sign
+	DataByte, _ := json.Marshal(dataMap)
+	log.Printf("请求参数：%v", string(DataByte))
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.member.status.query", string(DataByte))
+	if err != nil {
+		return "", err
+	}
+	log.Println(string(resp))
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // CloudAccountTransfer 转账（企业转个人）
 func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccountTransferParams) (string, error) {
 	config := sandPay.Config
@@ -39,10 +77,7 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
 	plaintext, _ := json.Marshal(dataMap)
-	//log.Printf("秘钥：%v", key)
-	//log.Printf("AES 加密前：%v", string(plaintext))
 	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
-	//log.Printf("AES 加密后：%v", dataMap["data"])
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
@@ -167,10 +202,7 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	key := sanDe.RandStr(16)
 	dataMap := StructToMap(body)
 	plaintext, _ := json.Marshal(dataMap)
-	//log.Printf("秘钥：%v", key)
-	//log.Printf("AES 加密前：%v", string(plaintext))
 	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
-	//log.Printf("AES 加密后：%v", dataMap["data"])
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign

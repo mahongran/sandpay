@@ -25,6 +25,11 @@ type OneClickAccountOpening struct {
 	NotifyUrl string `json:"notifyUrl"` //异步通知地址
 	FrontUrl  string `json:"frontUrl"`  //前台通知地址
 }
+
+type CloudAccountUserInfoRequest struct {
+	CloudAccountCommon
+	BizUserNo string `json:"bizUserNo"`
+}
 type CloudAccountTransferRequest struct {
 	CloudAccountCommon
 	//账户类型01：支付电子户  02：宝易付权益电子户

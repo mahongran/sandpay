@@ -7,6 +7,15 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+type CloudAccountUserInfoParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+}
+
 //CloudAccountTransferParams 云账户转账（企业转个人）
 type CloudAccountTransferParams struct {
 	//商户号下每次请求的唯一流水号
