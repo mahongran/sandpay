@@ -26,6 +26,22 @@ type OneClickAccountOpening struct {
 	FrontUrl  string `json:"frontUrl"`  //前台通知地址
 }
 
+// CloudAccountCancellationRequest 销户参数参数
+type CloudAccountCancellationRequest struct {
+	CloudAccountCommon
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+	//操作类型 CLOSE－销户
+	BizType string `json:"bizType"`
+	//回调地址
+	NotifyUrl string `json:"notifyUrl"`
+	FrontUrl  string `json:"frontUrl"`
+	Remark    string `json:"remark"`
+}
+
+// CloudAccountUserInfoRequest 云账户详情参数
 type CloudAccountUserInfoRequest struct {
 	CloudAccountCommon
 	BizUserNo string `json:"bizUserNo"`

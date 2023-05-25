@@ -7,6 +7,21 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+type CloudAccountCancellationParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+	//操作类型 CLOSE－销户
+	BizType string `json:"bizType"`
+	//回调地址
+	NotifyUrl string `json:"notifyUrl"`
+	FrontUrl  string `json:"frontUrl"`
+	Remark    string `json:"remark"`
+}
+
 type CloudAccountUserInfoParams struct {
 	//商户号下每次请求的唯一流水号
 	CustomerOrderNo string `json:"customerOrderNo"`
@@ -31,7 +46,7 @@ type CloudAccountTransferParams struct {
 	//附言
 	Postscript string `json:"postscript"`
 	//备注
-	Remark string `json:"备注"`
+	Remark string `json:"remark"`
 	//请求api地址
 	ApiHost string `json:"apiHost"`
 	//异步通知地址
