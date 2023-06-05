@@ -31,17 +31,9 @@ func (sandPay *SandPay) CloudAccountCancellation(params elecaccountParams.CloudA
 	body.FrontUrl = params.FrontUrl
 	body.Remark = params.Remark
 
-	sanDe := util.SandAES{}
-	key := sanDe.RandStr(16)
-	dataMap := StructToMap(body)
-	plaintext, _ := json.Marshal(dataMap)
-	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
-	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
-	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
-	dataMap["sign"] = sign
-	DataByte, _ := json.Marshal(dataMap)
-	log.Printf("请求参数：%v", string(DataByte))
-	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.member.status.modify", string(DataByte))
+	DataByte := AddSignature(body)
+	log.Printf("请求参数：%v", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.member.status.modify", DataByte)
 	if err != nil {
 		return "", err
 	}
@@ -69,17 +61,10 @@ func (sandPay *SandPay) CloudAccountUserInfo(params elecaccountParams.CloudAccou
 	body.CustomerOrderNo = params.CustomerOrderNo
 	body.BizUserNo = params.BizUserNo
 
-	sanDe := util.SandAES{}
-	key := sanDe.RandStr(16)
-	dataMap := StructToMap(body)
-	plaintext, _ := json.Marshal(dataMap)
-	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
-	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
-	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
-	dataMap["sign"] = sign
-	DataByte, _ := json.Marshal(dataMap)
-	log.Printf("请求参数：%v", string(DataByte))
-	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.member.status.query", string(DataByte))
+	DataByte := AddSignature(body)
+
+	log.Printf("请求参数：%v", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.member.status.query", DataByte)
 	if err != nil {
 		return "", err
 	}
@@ -116,17 +101,10 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	body.Postscript = params.Postscript
 	body.Remark = params.Remark
 	body.NotifyUrl = params.NotifyUrl
-	sanDe := util.SandAES{}
-	key := sanDe.RandStr(16)
-	dataMap := StructToMap(body)
-	plaintext, _ := json.Marshal(dataMap)
-	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
-	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
-	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
-	dataMap["sign"] = sign
-	DataByte, _ := json.Marshal(dataMap)
-	log.Printf("请求参数：%v", string(DataByte))
-	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.corp.transfer", string(DataByte))
+	DataByte := AddSignature(body)
+
+	log.Printf("请求参数：%v", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.corp.transfer", DataByte)
 	if err != nil {
 		return "", err
 	}
@@ -241,16 +219,9 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	body.Mobile = params.Mobile
 	body.NotifyUrl = params.NotifyUrl
 	body.FrontUrl = params.FrontUrl
-	sanDe := util.SandAES{}
-	key := sanDe.RandStr(16)
-	dataMap := StructToMap(body)
-	plaintext, _ := json.Marshal(dataMap)
-	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
-	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
-	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
-	dataMap["sign"] = sign
-	DataByte, _ := json.Marshal(dataMap)
-	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", string(DataByte))
+	DataByte := AddSignature(body)
+
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", DataByte)
 	if err != nil {
 		return "", err
 	}
@@ -287,4 +258,16 @@ func StructToMap(p interface{}) (list map[string]interface{}) {
 		return list
 	}
 	return m
+}
+func AddSignature(body interface{}) string {
+	sanDe := util.SandAES{}
+	key := sanDe.RandStr(16)
+	dataMap := StructToMap(body)
+	plaintext, _ := json.Marshal(dataMap)
+	dataMap["data"], _ = sanDe.AesEcbPkcs5Padding(key, string(plaintext))
+	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
+	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
+	dataMap["sign"] = sign
+	DataByte, _ := json.Marshal(dataMap)
+	return string(DataByte)
 }
