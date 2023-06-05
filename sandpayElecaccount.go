@@ -14,6 +14,42 @@ import (
 	"time"
 )
 
+// OneClickAccountOpening 云账户一键开户
+func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.OneClickAccountOpening
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.NickName = params.NickName
+	body.Name = params.Name
+	body.IdType = params.IdType
+	body.IdNo = params.IdNo
+	body.Mobile = params.Mobile
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+	DataByte := AddSignature(body)
+
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", DataByte)
+	if err != nil {
+		return "", err
+	}
+
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // CloudAccountCancellation 云账户用户注销
 func (sandPay *SandPay) CloudAccountCancellation(params elecaccountParams.CloudAccountCancellationParams) (string, error) {
 	config := sandPay.Config
@@ -199,42 +235,6 @@ func shouldUrlEncode(key string, keysToUrlEncode []string) bool {
 		}
 	}
 	return false
-}
-
-// OneClickAccountOpening 云账户一键开户
-func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {
-	config := sandPay.Config
-	var body elecaccountRequest.OneClickAccountOpening
-	body.Mid = config.MerId
-	body.SignType = "SHA1WithRSA"
-	body.EncryptType = "AES"
-	body.Version = "1.0.0"
-	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
-	body.CustomerOrderNo = params.CustomerOrderNo
-	body.BizUserNo = params.BizUserNo
-	body.NickName = params.NickName
-	body.Name = params.Name
-	body.IdType = params.IdType
-	body.IdNo = params.IdNo
-	body.Mobile = params.Mobile
-	body.NotifyUrl = params.NotifyUrl
-	body.FrontUrl = params.FrontUrl
-	DataByte := AddSignature(body)
-
-	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", DataByte)
-	if err != nil {
-		return "", err
-	}
-
-	d := make(map[string]interface{})
-	if err := json.Unmarshal(resp, &d); err != nil {
-		return "", err
-	}
-	j, err := pay.CloudAccountVerification(d)
-	if err != nil {
-		return "", err
-	}
-	return j, nil
 }
 
 func StructToMapString(p interface{}) (list map[string]string) {
