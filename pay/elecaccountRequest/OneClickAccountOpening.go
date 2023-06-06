@@ -13,6 +13,18 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// WithdrawalApplicationRequest 提现申请
+type WithdrawalApplicationRequest struct {
+	CloudAccountCommon
+	BizUserNo     string `json:"bizUserNo"`     //用户在商户系统中的唯一编号
+	AccountType   string `json:"accountType"`   //01：支付电子户 02：宝易付权益电子户
+	OrderAmt      string `json:"idType"`        //提现金额
+	RelatedCardNo string `json:"relatedCardNo"` //关联卡号id
+	Remark        string `json:"remark"`        //备注
+	NotifyUrl     string `json:"notifyUrl"`     //异步通知地址
+	FrontUrl      string `json:"frontUrl"`      //前台通知地址
+}
+
 // OneClickAccountOpening 一键开户
 type OneClickAccountOpening struct {
 	CloudAccountCommon

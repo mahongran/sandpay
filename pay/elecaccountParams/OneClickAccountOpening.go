@@ -102,3 +102,16 @@ type CloudAccountPackage struct {
 	//扩展域
 	Extends string `json:"extends"`
 }
+
+//WithdrawalApplicationParam 云账户提现申请参数定义
+type WithdrawalApplicationParam struct {
+	CustomerOrderNo string `json:"customerOrderNo"` //商户号下每次请求的唯一流水号
+	BizUserNo       string `json:"bizUserNo"`       //用户在商户系统中的唯一编号
+	AccountType     string `json:"accountType"`     //01：支付电子户 02：宝易付权益电子户
+	OrderAmt        string `json:"idType"`          //提现金额
+	RelatedCardNo   string `json:"relatedCardNo"`   //关联卡号id
+	Remark          string `json:"remark"`          //备注
+	NotifyUrl       string `json:"notifyUrl"`       //异步通知地址
+	FrontUrl        string `json:"frontUrl"`        //前台通知地址
+	ApiHost         string `json:"apiHost"`         //请求api地址
+}
