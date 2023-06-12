@@ -29,6 +29,23 @@ type SignPageRequiredParam struct {
 	IdFileRequired   bool `json:"idFileRequired"`   //上传身份证设置
 	PwdRequired      bool `json:"pwdRequired"`      //密码设置
 }
+type BankInfoParam struct {
+	CardNo string `json:"cardNo"`
+}
+
+// OneClickAccountOpeningRequest 个人会员绑卡并开户
+type OneClickAccountOpeningRequest struct {
+	CloudAccountCommon
+	BizUserNo string        `json:"bizUserNo"` //用户在商户系统中的唯一编号
+	NickName  string        `json:"nickName"`  //会员昵称
+	Name      string        `json:"name"`      //会员姓名
+	IdType    string        `json:"idType"`    //01：身份证
+	IdNo      string        `json:"idNo"`      //身份证号
+	Mobile    string        `json:"mobile"`    //会员手机号
+	NotifyUrl string        `json:"notifyUrl"` //异步通知地址
+	FrontUrl  string        `json:"frontUrl"`  //前台通知地址
+	BankInfo  BankInfoParam `json:"bankInfo"`  //银行信息域
+}
 
 // OneClickAccountOpening 一键开户
 type OneClickAccountOpening struct {
