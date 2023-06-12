@@ -13,6 +13,23 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// AssociatedCardQueryRequest 关联卡查询
+type AssociatedCardQueryRequest struct {
+	CloudAccountCommon
+	BizUserNo     string `json:"bizUserNo"`     //用户在商户系统中的唯一编号
+	RelatedCardNo string `json:"relatedCardNo"` //需要查询具体某张卡时上传
+	NotifyUrl     string `json:"notifyUrl"`     //异步通知地址
+	FrontUrl      string `json:"frontUrl"`      //前台通知地址
+}
+
+// IsSetPayPasswordRequest 是否设置支付密码
+type IsSetPayPasswordRequest struct {
+	CloudAccountCommon
+	BizUserNo string `json:"bizUserNo"` //用户在商户系统中的唯一编号
+	NotifyUrl string `json:"notifyUrl"` //异步通知地址
+	FrontUrl  string `json:"frontUrl"`  //前台通知地址
+}
+
 // WithdrawalApplicationRequest 提现申请
 type WithdrawalApplicationRequest struct {
 	CloudAccountCommon

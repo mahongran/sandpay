@@ -14,6 +14,65 @@ import (
 	"time"
 )
 
+// AssociatedCardQuery 关联卡查询
+func (sandPay *SandPay) AssociatedCardQuery(params elecaccountParams.AssociatedCardQueryParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.AssociatedCardQueryRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.RelatedCardNo = params.RelatedCardNo
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.bind.card.query", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
+// IsSetPayPassword 是否设置支付密码
+func (sandPay *SandPay) IsSetPayPassword(params elecaccountParams.IsSetPayPasswordParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.IsSetPayPasswordRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.pay.password.query", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // WithdrawalApplication 云账户提现申请
 func (sandPay *SandPay) WithdrawalApplication(params elecaccountParams.WithdrawalApplicationParam) (string, error) {
 	config := sandPay.Config

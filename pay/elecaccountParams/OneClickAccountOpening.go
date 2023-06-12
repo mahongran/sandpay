@@ -7,6 +7,32 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// AssociatedCardQueryParams 关联卡查询
+type AssociatedCardQueryParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost       string `json:"apiHost"`
+	RelatedCardNo string `json:"relatedCardNo"` //需要查询具体某张卡时上传
+	NotifyUrl     string `json:"notifyUrl"`
+	FrontUrl      string `json:"frontUrl"`
+}
+
+// IsSetPayPasswordParams 是否设置支付密码请求体
+type IsSetPayPasswordParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+
+	NotifyUrl string `json:"notifyUrl"`
+	FrontUrl  string `json:"frontUrl"`
+}
+
 // CloudAccountCancellationConfirmParams 销户确认接口
 type CloudAccountCancellationConfirmParams struct {
 	//商户号下每次请求的唯一流水号
