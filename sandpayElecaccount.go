@@ -106,6 +106,8 @@ func (sandPay *SandPay) CloudAccountCancellationConfirm(params elecaccountParams
 	body.ApiHost = params.ApiHost
 	body.OriCustomerOrderNo = params.OriCustomerOrderNo
 	body.SmsCode = params.SmsCode
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
 
 	DataByte := AddSignature(body)
 	log.Printf("请求参数：%v", DataByte)

@@ -54,7 +54,9 @@ type CloudAccountCancellationConfirmRequest struct {
 	//原交易单号 请求会员状态管理所用的单号
 	OriCustomerOrderNo string `json:"oriCustomerOrderNo"`
 	//短信验证码 请求会员状态管理销户会下发给用户
-	SmsCode string `json:"smsCode"`
+	SmsCode   string `json:"smsCode"`
+	NotifyUrl string `json:"notifyUrl"`
+	FrontUrl  string `json:"frontUrl"`
 }
 
 // CloudAccountCancellationRequest 销户参数参数
