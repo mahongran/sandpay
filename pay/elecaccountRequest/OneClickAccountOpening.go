@@ -32,6 +32,18 @@ type SignPageRequiredParam struct {
 type BankInfoParam struct {
 	CardNo string `json:"cardNo"`
 }
+type SignProtocolParam struct {
+	ProtocolNo string `json:"protocolNo"` //XY001：开户协议 XY002：商户代扣协议
+}
+
+// AgreementSigningRequest 协议签约
+type AgreementSigningRequest struct {
+	CloudAccountCommon
+	BizUserNo    string            `json:"bizUserNo"`    //用户在商户系统中的唯一编号
+	NotifyUrl    string            `json:"notifyUrl"`    //异步通知地址
+	FrontUrl     string            `json:"frontUrl"`     //前台通知地址
+	SignProtocol SignProtocolParam `json:"signProtocol"` //银行信息域
+}
 
 // OneClickAccountOpeningRequest 个人会员绑卡并开户
 type OneClickAccountOpeningRequest struct {

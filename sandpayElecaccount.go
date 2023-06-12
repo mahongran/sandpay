@@ -50,6 +50,40 @@ func (sandPay *SandPay) WithdrawalApplication(params elecaccountParams.Withdrawa
 	return j, nil
 }
 
+// AgreementSigning 协议签约
+func (sandPay *SandPay) AgreementSigning(params elecaccountParams.AgreementSigningParam) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.AgreementSigningRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+	var SignProtocolParam elecaccountRequest.SignProtocolParam
+	SignProtocolParam.ProtocolNo = "XY001"
+	body.SignProtocol = SignProtocolParam
+	DataByte := AddSignature(body)
+
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.sign", DataByte)
+	if err != nil {
+		return "", err
+	}
+
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // BindCardToOpenAnAccount 云账户开户&&绑卡
 func (sandPay *SandPay) BindCardToOpenAnAccount(params elecaccountParams.BindCardToOpenAnAccountParam) (string, error) {
 	config := sandPay.Config

@@ -68,6 +68,20 @@ type CloudAccountTransferParams struct {
 	NotifyUrl string `json:"notifyUrl"`
 }
 
+// AgreementSigningParam 协议签约
+type AgreementSigningParam struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//异步通知地址
+	NotifyUrl string `json:"notifyUrl"`
+	//前台通知地址
+	FrontUrl string `json:"frontUrl"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+}
+
 // BindCardToOpenAnAccountParam 云账户开户&&绑卡
 type BindCardToOpenAnAccountParam struct {
 	//商户号下每次请求的唯一流水号
