@@ -24,18 +24,37 @@ type WithdrawalApplicationRequest struct {
 	NotifyUrl     string `json:"notifyUrl"`     //异步通知地址
 	FrontUrl      string `json:"frontUrl"`      //前台通知地址
 }
+type SignPageRequiredParam struct {
+	BindCardRequired bool `json:"bindCardRequired"` //绑卡设置
+	IdFileRequired   bool `json:"idFileRequired"`   //上传身份证设置
+	PwdRequired      bool `json:"pwdRequired"`      //密码设置
+}
 
 // OneClickAccountOpening 一键开户
 type OneClickAccountOpening struct {
 	CloudAccountCommon
-	BizUserNo string `json:"bizUserNo"` //用户在商户系统中的唯一编号
-	NickName  string `json:"nickName"`  //会员昵称
-	Name      string `json:"name"`      //会员姓名
-	IdType    string `json:"idType"`    //01：身份证
-	IdNo      string `json:"idNo"`      //身份证号
-	Mobile    string `json:"mobile"`    //会员手机号
-	NotifyUrl string `json:"notifyUrl"` //异步通知地址
-	FrontUrl  string `json:"frontUrl"`  //前台通知地址
+	BizUserNo        string                `json:"bizUserNo"`        //用户在商户系统中的唯一编号
+	NickName         string                `json:"nickName"`         //会员昵称
+	Name             string                `json:"name"`             //会员姓名
+	IdType           string                `json:"idType"`           //01：身份证
+	IdNo             string                `json:"idNo"`             //身份证号
+	Mobile           string                `json:"mobile"`           //会员手机号
+	NotifyUrl        string                `json:"notifyUrl"`        //异步通知地址
+	FrontUrl         string                `json:"frontUrl"`         //前台通知地址
+	SignPageRequired SignPageRequiredParam `json:"signPageRequired"` //签约设置域
+}
+
+// CloudAccountCancellationConfirmRequest 销户确认参数参数
+type CloudAccountCancellationConfirmRequest struct {
+	CloudAccountCommon
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+	//原交易单号 请求会员状态管理所用的单号
+	OriCustomerOrderNo string `json:"oriCustomerOrderNo"`
+	//短信验证码 请求会员状态管理销户会下发给用户
+	SmsCode string `json:"smsCode"`
 }
 
 // CloudAccountCancellationRequest 销户参数参数

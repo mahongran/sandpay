@@ -54,6 +54,7 @@ func (sandPay *SandPay) WithdrawalApplication(params elecaccountParams.Withdrawa
 func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClickAccountOpening) (string, error) {
 	config := sandPay.Config
 	var body elecaccountRequest.OneClickAccountOpening
+
 	body.Mid = config.MerId
 	body.SignType = "SHA1WithRSA"
 	body.EncryptType = "AES"
@@ -68,6 +69,11 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	body.Mobile = params.Mobile
 	body.NotifyUrl = params.NotifyUrl
 	body.FrontUrl = params.FrontUrl
+	var SignPageRequiredParam elecaccountRequest.SignPageRequiredParam
+	SignPageRequiredParam.PwdRequired = true
+	SignPageRequiredParam.IdFileRequired = false
+	SignPageRequiredParam.BindCardRequired = true
+	body.SignPageRequired = SignPageRequiredParam
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", DataByte)
@@ -75,6 +81,39 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 		return "", err
 	}
 
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
+// CloudAccountCancellationConfirm 云账户注销确认接口
+func (sandPay *SandPay) CloudAccountCancellationConfirm(params elecaccountParams.CloudAccountCancellationConfirmParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.CloudAccountCancellationConfirmRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.ApiHost = params.ApiHost
+	body.OriCustomerOrderNo = params.OriCustomerOrderNo
+	body.SmsCode = params.SmsCode
+
+	DataByte := AddSignature(body)
+	log.Printf("请求参数：%v", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.member.status.modify", DataByte)
+	if err != nil {
+		return "", err
+	}
+	log.Println(string(resp))
 	d := make(map[string]interface{})
 	if err := json.Unmarshal(resp, &d); err != nil {
 		return "", err

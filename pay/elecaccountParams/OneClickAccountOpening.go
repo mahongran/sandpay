@@ -7,6 +7,18 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+type CloudAccountCancellationConfirmParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost string `json:"apiHost"`
+	//原交易单号 请求会员状态管理所用的单号
+	OriCustomerOrderNo string `json:"oriCustomerOrderNo"`
+	//短信验证码 请求会员状态管理销户会下发给用户
+	SmsCode string `json:"smsCode"`
+}
 type CloudAccountCancellationParams struct {
 	//商户号下每次请求的唯一流水号
 	CustomerOrderNo string `json:"customerOrderNo"`
