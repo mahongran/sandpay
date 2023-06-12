@@ -111,7 +111,7 @@ func (sandPay *SandPay) CloudAccountCancellationConfirm(params elecaccountParams
 
 	DataByte := AddSignature(body)
 	log.Printf("请求参数：%v", DataByte)
-	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.member.status.modify", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.member.modify.confirm", DataByte)
 	if err != nil {
 		return "", err
 	}
