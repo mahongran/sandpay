@@ -7,6 +7,21 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// SetAssociatedBankCardParams 设置关联银行卡
+type SetAssociatedBankCardParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost         string `json:"apiHost"`
+	CardNo          string `json:"cardNo"`          //卡号
+	BankMobile      string `json:"bankMobile"`      //银行预留手机号
+	RelatedCardType string `json:"relatedCardType"` // 01：提现卡（默认） 02:快捷充值+提现卡
+	NotifyUrl       string `json:"notifyUrl"`
+	FrontUrl        string `json:"frontUrl"`
+}
+
 // AssociatedCardQueryParams 关联卡查询
 type AssociatedCardQueryParams struct {
 	//商户号下每次请求的唯一流水号

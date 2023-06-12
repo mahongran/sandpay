@@ -14,6 +14,38 @@ import (
 	"time"
 )
 
+// SetAssociatedBankCard 设置关联银行卡
+func (sandPay *SandPay) SetAssociatedBankCard(params elecaccountParams.SetAssociatedBankCardParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.SetAssociatedBankCardRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.CardNo = params.CardNo
+	body.BankMobile = params.BankMobile
+	body.RelatedCardType = params.RelatedCardType
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.bind.card", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // AssociatedCardQuery 关联卡查询
 func (sandPay *SandPay) AssociatedCardQuery(params elecaccountParams.AssociatedCardQueryParams) (string, error) {
 	config := sandPay.Config

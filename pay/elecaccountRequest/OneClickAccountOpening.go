@@ -13,6 +13,17 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// SetAssociatedBankCardRequest 关联卡查询
+type SetAssociatedBankCardRequest struct {
+	CloudAccountCommon
+	BizUserNo       string `json:"bizUserNo"`       //用户在商户系统中的唯一编号
+	CardNo          string `json:"cardNo"`          //卡号
+	BankMobile      string `json:"bankMobile"`      //银行预留手机号
+	RelatedCardType string `json:"relatedCardType"` // 01：提现卡（默认） 02:快捷充值+提现卡
+	NotifyUrl       string `json:"notifyUrl"`       //异步通知地址
+	FrontUrl        string `json:"frontUrl"`        //前台通知地址
+}
+
 // AssociatedCardQueryRequest 关联卡查询
 type AssociatedCardQueryRequest struct {
 	CloudAccountCommon
