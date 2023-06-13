@@ -13,6 +13,12 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+type UnbindAssociatedCardsRequest struct {
+	CloudAccountCommon
+	BizUserNo     string `json:"bizUserNo"`     //用户在商户系统中的唯一编号
+	RelatedCardNo string `json:"relatedCardNo"` //需要查询具体某张卡时上传
+	NotifyUrl     string `json:"notifyUrl"`     //异步通知地址
+}
 type SetAssociatedBankCardConfirmRequest struct {
 	CloudAccountCommon
 	BizUserNo          string `json:"bizUserNo"`          //用户在商户系统中的唯一编号
