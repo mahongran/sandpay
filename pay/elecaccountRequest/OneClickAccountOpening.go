@@ -13,6 +13,14 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+type SetAssociatedBankCardConfirmRequest struct {
+	CloudAccountCommon
+	BizUserNo          string `json:"bizUserNo"`          //用户在商户系统中的唯一编号
+	OriCustomerOrderNo string `json:"oriCustomerOrderNo"` //原单号
+	SmsCode            string `json:"smsCode"`            //验证码
+	NotifyUrl          string `json:"notifyUrl"`          //异步通知地址
+}
+
 // SetAssociatedBankCardRequest 关联卡查询
 type SetAssociatedBankCardRequest struct {
 	CloudAccountCommon

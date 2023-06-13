@@ -7,6 +7,18 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+type SetAssociatedBankCardConfirmParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost            string `json:"apiHost"`
+	OriCustomerOrderNo string `json:"oriCustomerOrderNo"` //原单号
+	SmsCode            string `json:"smsCode"`            //验证码
+	NotifyUrl          string `json:"notifyUrl"`
+}
+
 // SetAssociatedBankCardParams 设置关联银行卡
 type SetAssociatedBankCardParams struct {
 	//商户号下每次请求的唯一流水号
