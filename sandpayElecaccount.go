@@ -29,6 +29,7 @@ func (sandPay *SandPay) PasswordManagement(params elecaccountParams.PasswordMana
 	body.ManagementType = params.ManagementType
 	body.Extend = params.Extend
 	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.pay.password.manage", DataByte)
 	if err != nil {
