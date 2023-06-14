@@ -13,6 +13,13 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// BalanceQueryRequest 查询用户余额
+type BalanceQueryRequest struct {
+	CloudAccountCommon
+	BizUserNo   string `json:"bizUserNo"`   //用户在商户系统中的唯一编号
+	AccountType string `json:"accountType"` //01：支付电子户 02：权益账户 03：奖励金户
+}
+
 // PasswordManagementRequest 密码管理
 type PasswordManagementRequest struct {
 	CloudAccountCommon

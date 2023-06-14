@@ -7,6 +7,17 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// BalanceQueryParams 查询用户余额
+type BalanceQueryParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost     string `json:"apiHost"`
+	AccountType string `json:"accountType"` //01：支付电子户 02：权益账户 03：奖励金户
+}
+
 // PasswordManagementParams 密码管理
 type PasswordManagementParams struct {
 	//商户号下每次请求的唯一流水号
