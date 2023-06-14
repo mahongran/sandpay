@@ -30,6 +30,8 @@ func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundO
 	body.SmsCode = params.SmsCode
 
 	DataByte := AddSignature(body)
+	log.Printf("请求参数：%v", DataByte)
+	log.Printf("请求地址：%v", params.ApiHost+"/v4/electrans/ceas.elec.trans.order.confirm")
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.order.confirm", DataByte)
 	if err != nil {
 		return "", err
