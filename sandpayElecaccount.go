@@ -65,10 +65,8 @@ func (sandPay *SandPay) BackendRechargeOrderPlacement(params elecaccountParams.B
 	body.WalletAmt = params.WalletAmt
 	body.Extend = params.Extend
 	DataByte := AddSignature(body)
-	log.Printf("DataByte：%v", DataByte)
-	log.Printf("url：%v", params.ApiHost+"/v4/elecaccount/ceas.elec.trans.third.payment.deposit")
 
-	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.trans.third.payment.deposit", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.third.payment.deposit", DataByte)
 	if err != nil {
 		return "", err
 	}
