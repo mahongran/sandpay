@@ -14,6 +14,37 @@ import (
 	"time"
 )
 
+// PasswordManagement 密码管理
+func (sandPay *SandPay) PasswordManagement(params elecaccountParams.PasswordManagementParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.PasswordManagementRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.PageType = params.PageType
+	body.ManagementType = params.ManagementType
+	body.Extend = params.Extend
+	body.NotifyUrl = params.NotifyUrl
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.pay.password.manage", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // UnbindAssociatedCards 解绑关联卡
 func (sandPay *SandPay) UnbindAssociatedCards(params elecaccountParams.UnbindAssociatedCardsParams) (string, error) {
 	config := sandPay.Config

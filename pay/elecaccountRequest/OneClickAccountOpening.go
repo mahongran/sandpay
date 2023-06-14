@@ -13,12 +13,27 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// PasswordManagementRequest 密码管理
+type PasswordManagementRequest struct {
+	CloudAccountCommon
+	BizUserNo string `json:"bizUserNo"` //用户在商户系统中的唯一编号
+	NotifyUrl string `json:"notifyUrl"` //异步通知地址
+	FrontUrl  string `json:"frontUrl"`  //前台通知地址
+
+	PageType       string `json:"pageType"`       //标准页面 01
+	ManagementType string `json:"managementType"` // 01：设置/重置支付密码 02：修改支付密码 03:   重置会员手机号
+	Extend         string `json:"extend"`         //扩展域
+}
+
+// UnbindAssociatedCardsRequest 解绑银行卡
 type UnbindAssociatedCardsRequest struct {
 	CloudAccountCommon
 	BizUserNo     string `json:"bizUserNo"`     //用户在商户系统中的唯一编号
 	RelatedCardNo string `json:"relatedCardNo"` //需要查询具体某张卡时上传
 	NotifyUrl     string `json:"notifyUrl"`     //异步通知地址
 }
+
+// SetAssociatedBankCardConfirmRequest 绑定银行卡
 type SetAssociatedBankCardConfirmRequest struct {
 	CloudAccountCommon
 	BizUserNo          string `json:"bizUserNo"`          //用户在商户系统中的唯一编号

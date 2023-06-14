@@ -7,6 +7,23 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// PasswordManagementParams 密码管理
+type PasswordManagementParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost   string `json:"apiHost"`
+	NotifyUrl string `json:"notifyUrl"`
+	FrontUrl  string `json:"frontUrl"` //前台通知地址
+
+	PageType       string `json:"pageType"`       //标准页面 01
+	ManagementType string `json:"managementType"` // 01：设置/重置支付密码 02：修改支付密码 03:   重置会员手机号
+	Extend         string `json:"extend"`         //扩展域
+}
+
+// UnbindAssociatedCardsParams 解绑银行卡
 type UnbindAssociatedCardsParams struct {
 	//商户号下每次请求的唯一流水号
 	CustomerOrderNo string `json:"customerOrderNo"`
@@ -17,6 +34,8 @@ type UnbindAssociatedCardsParams struct {
 	RelatedCardNo string `json:"relatedCardNo"` //需要查询具体某张卡时上传
 	NotifyUrl     string `json:"notifyUrl"`
 }
+
+// SetAssociatedBankCardConfirmParams 绑定银行卡
 type SetAssociatedBankCardConfirmParams struct {
 	//商户号下每次请求的唯一流水号
 	CustomerOrderNo string `json:"customerOrderNo"`
