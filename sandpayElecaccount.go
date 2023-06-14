@@ -28,10 +28,10 @@ func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundO
 	body.OriCustomerOrderNo = params.OriCustomerOrderNo
 	body.OriOrderAmt = params.OriOrderAmt
 	body.SmsCode = params.SmsCode
-
+	BeforeEncryption, _ := json.Marshal(body)
+	log.Printf("明文请求参数：%v", BeforeEncryption)
 	DataByte := AddSignature(body)
-	log.Printf("请求参数：%v", DataByte)
-	log.Printf("请求地址：%v", params.ApiHost+"/v4/electrans/ceas.elec.trans.order.confirm")
+	log.Printf("密文请求参数：%v", DataByte)
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.order.confirm", DataByte)
 	if err != nil {
 		return "", err
@@ -699,6 +699,17 @@ func AddSignature(body interface{}) string {
 	dataMap["encryptKey"], _ = pay.FormEncryptKey(key)
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
-	DataByte, _ := json.Marshal(dataMap)
+
+	var lists map[string]interface{}
+	lists["mid"] = dataMap["mid"]
+	lists["sign"] = dataMap["sign"]
+	lists["timestamp"] = dataMap["timestamp"]
+	lists["version"] = dataMap["version"]
+	lists["customerOrderNo"] = dataMap["customerOrderNo"]
+	lists["signType"] = dataMap["signType"]
+	lists["encryptType"] = dataMap["encryptType"]
+	lists["encryptKey"] = dataMap["encryptKey"]
+	lists["data"] = dataMap["data"]
+	DataByte, _ := json.Marshal(lists)
 	return string(DataByte)
 }
