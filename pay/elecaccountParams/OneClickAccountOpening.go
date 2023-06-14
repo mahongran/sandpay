@@ -17,6 +17,11 @@ type FundOperationConfirmationParams struct {
 	ApiHost            string `json:"apiHost"`            //请求api地址
 }
 
+// PayExtendQuickPay 充值扩展域 快捷充值
+type PayExtendQuickPay struct {
+	RelatedCardNo string `json:"relatedCardNo"` //关联卡号
+}
+
 // BackendRechargeOrderPlacementParams 后台充值下单
 // WX_JSBRIDGE 微信公众号支付
 // WX_JSAPI 微信小程序支付

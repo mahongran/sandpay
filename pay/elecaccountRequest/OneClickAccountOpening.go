@@ -22,11 +22,6 @@ type FundOperationConfirmationRequest struct {
 	SmsCode            string `json:"smsCode"`
 }
 
-// PayExtendQuickPay 充值扩展域 快捷充值
-type PayExtendQuickPay struct {
-	RelatedCardNo string `json:"relatedCardNo"` //关联卡号
-}
-
 // BackendRechargeOrderPlacementRequest 后台充值
 type BackendRechargeOrderPlacementRequest struct {
 	CloudAccountCommon
