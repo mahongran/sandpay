@@ -14,6 +14,72 @@ import (
 	"time"
 )
 
+// FundOperationConfirmation 资金操作确认
+func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundOperationConfirmationParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.FundOperationConfirmationRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.OriCustomerOrderNo = params.OriCustomerOrderNo
+	body.OriOrderAmt = params.OriOrderAmt
+	body.SmsCode = params.SmsCode
+
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.trans.order.confirm", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
+// BackendRechargeOrderPlacement 云账户后台充值下单
+func (sandPay *SandPay) BackendRechargeOrderPlacement(params elecaccountParams.BackendRechargeOrderPlacementParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.BackendRechargeOrderPlacementRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+
+	body.OrderTimeOut = params.OrderTimeOut
+	body.PayTool = params.PayTool
+	body.PayExtend = params.PayExtend
+	body.WalletAmt = params.WalletAmt
+	body.Extend = params.Extend
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.trans.third.payment.deposit", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // BalanceQuery 查询用户余额
 func (sandPay *SandPay) BalanceQuery(params elecaccountParams.BalanceQueryParams) (string, error) {
 	config := sandPay.Config

@@ -7,6 +7,41 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// FundOperationConfirmationParams 收款资金确认
+type FundOperationConfirmationParams struct {
+	CustomerOrderNo    string `json:"customerOrderNo"`    //商户号下每次请求的唯一流水号
+	BizUserNo          string `json:"bizUserNo"`          //用户在商户系统中的唯一编号
+	OriCustomerOrderNo string `json:"oriCustomerOrderNo"` //原交易订单号
+	OriOrderAmt        string `json:"oriOrderAmt"`        //原订单金额
+	SmsCode            string `json:"smsCode"`            //验证码
+	ApiHost            string `json:"apiHost"`            //请求api地址
+}
+
+// BackendRechargeOrderPlacementParams 后台充值下单
+// WX_JSBRIDGE 微信公众号支付
+// WX_JSAPI 微信小程序支付
+// QUICKPAY快捷充值
+// UNION_PAY 银联SDK
+// ALI_JSAPI 支付宝小程序支付
+// ALI_JSBRIDGE 支付宝生活号支付
+// UNION_PAY_H5 银联H5快捷
+type BackendRechargeOrderPlacementParams struct {
+	//商户号下每次请求的唯一流水号
+	CustomerOrderNo string `json:"customerOrderNo"`
+	//用户在商户系统中的唯一编号
+	BizUserNo string `json:"bizUserNo"`
+	//请求api地址
+	ApiHost   string `json:"apiHost"`
+	NotifyUrl string `json:"notifyUrl"`
+	FrontUrl  string `json:"frontUrl"` //前台通知地址
+
+	OrderTimeOut string      `json:"orderTimeOut"` //订单超时时间 格式：yyyymmddHHmmss默认2小时
+	PayTool      string      `json:"payTool"`      //充值方式
+	PayExtend    interface{} `json:"payExtend"`    //充值扩展域
+	WalletAmt    string      `json:"walletAmt"`    //充值金额
+	Extend       string      `json:"extend"`       //附加数据
+}
+
 // BalanceQueryParams 查询用户余额
 type BalanceQueryParams struct {
 	//商户号下每次请求的唯一流水号

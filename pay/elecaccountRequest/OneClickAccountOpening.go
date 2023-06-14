@@ -13,6 +13,34 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// FundOperationConfirmationRequest 收款资金确认
+type FundOperationConfirmationRequest struct {
+	CloudAccountCommon
+	BizUserNo          string `json:"bizUserNo"`          //用户在商户系统中的唯一编号
+	OriCustomerOrderNo string `json:"oriCustomerOrderNo"` //原交易订单号
+	OriOrderAmt        string `json:"oriOrderAmt"`        //原订单金额
+	SmsCode            string `json:"smsCode"`
+}
+
+// PayExtendQuickPay 充值扩展域 快捷充值
+type PayExtendQuickPay struct {
+	RelatedCardNo string `json:"relatedCardNo"` //关联卡号
+}
+
+// BackendRechargeOrderPlacementRequest 后台充值
+type BackendRechargeOrderPlacementRequest struct {
+	CloudAccountCommon
+	BizUserNo string `json:"bizUserNo"` //用户在商户系统中的唯一编号
+	NotifyUrl string `json:"notifyUrl"` //异步通知地址
+	FrontUrl  string `json:"frontUrl"`  //前台通知地址
+
+	OrderTimeOut string      `json:"orderTimeOut"` //订单超时时间 格式：yyyymmddHHmmss默认2小时
+	PayTool      string      `json:"payTool"`      //充值方式
+	PayExtend    interface{} `json:"payExtend"`    //充值扩展域
+	WalletAmt    string      `json:"walletAmt"`    //充值金额
+	Extend       string      `json:"extend"`       //附加数据
+}
+
 // BalanceQueryRequest 查询用户余额
 type BalanceQueryRequest struct {
 	CloudAccountCommon
