@@ -29,7 +29,7 @@ func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundO
 	body.OriOrderAmt = params.OriOrderAmt
 	body.SmsCode = params.SmsCode
 	BeforeEncryption, _ := json.Marshal(body)
-	log.Printf("明文请求参数：%v", BeforeEncryption)
+	log.Printf("明文请求参数：%v", string(BeforeEncryption))
 	DataByte := AddSignature(body)
 	log.Printf("密文请求参数：%v", DataByte)
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.order.confirm", DataByte)
@@ -700,7 +700,8 @@ func AddSignature(body interface{}) string {
 	sign, _ := pay.PrivateSha1SignData(dataMap["data"].(string))
 	dataMap["sign"] = sign
 
-	var lists map[string]interface{}
+	lists := make(map[string]interface{})
+
 	lists["mid"] = dataMap["mid"]
 	lists["sign"] = dataMap["sign"]
 	lists["timestamp"] = dataMap["timestamp"]
