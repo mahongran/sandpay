@@ -30,7 +30,7 @@ func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundO
 	body.SmsCode = params.SmsCode
 
 	DataByte := AddSignature(body)
-	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.trans.order.confirm", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.order.confirm", DataByte)
 	if err != nil {
 		return "", err
 	}
