@@ -1,7 +1,9 @@
 package sandpay
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/url"
 	"strings"
 	"time"
@@ -47,11 +49,14 @@ func (sandPay *SandPay) CloudAccCreateOrder(params params.OrderPayParams) (resp 
 	signDataJsonString := pay.GenerateSignString(body, header)
 	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
 	postData := pay.GeneratePostData(signDataJsonString, sign)
+	j, _ := json.Marshal(&postData)
+	log.Printf("request data %v", string(j))
 
 	data, err := pay.PayPost(config.ApiHost+"/gw/cloudAcc/createOrder", postData)
 	if err != nil {
 		return
 	}
+	log.Printf("resp data %v", data.Data)
 	resp.SetData(data.Data)
 	return resp, err
 }

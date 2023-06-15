@@ -8,7 +8,6 @@ import (
 	"github.com/mahongran/sandpay/agent/response"
 	"io"
 	"io/ioutil"
-	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -122,8 +121,6 @@ func PayPost(requrl string, request map[string]string) (response response.Respon
 	defer resp.Body.Close()
 	data, err := ioutil.ReadAll(resp.Body)
 	dataString, _ := url.QueryUnescape(string(data[:]))
-
-	log.Printf("resp:%v , resp string %v", data, dataString)
 
 	if err != nil {
 		return response, err
