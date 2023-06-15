@@ -9,6 +9,8 @@ const PayModWeiXinMp = "sand_wx"
 
 // OrderPayParams 支付参数定义
 type OrderPayParams struct {
+	//账户扣款金额, 和订单金额一致
+	AccountAmt string `json:"accountAmt"`
 	//云账户用户唯一id
 	MasterAccount string `json:"masterAccount"`
 	// 用户id
