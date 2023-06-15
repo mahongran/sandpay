@@ -38,8 +38,6 @@ func (sandPay *SandPay) CloudAccCreateOrder(params params.OrderPayParams) (resp 
 		Subject:       params.Subject,
 		Body:          params.Body,
 		TxnTimeOut:    params.TxnTimeOut,
-		PayMode:       params.PayMode,
-		PayExtra:      params.PayExtra.ToJson(),
 		ClientIp:      params.ClientIp,
 		NotifyUrl:     sandPay.Config.NotifyUrl,
 		FrontUrl:      sandPay.Config.FrontUrl,
