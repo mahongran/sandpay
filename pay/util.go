@@ -8,6 +8,7 @@ import (
 	"github.com/mahongran/sandpay/agent/response"
 	"io"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -111,6 +112,7 @@ func PayPostNew(requrl string, request map[string]string) (resp *http.Response, 
 func PayPost(requrl string, request map[string]string) (response response.Response, err error) {
 	http := TimeoutClient()
 	resp, err := http.Post(requrl, "application/x-www-form-urlencoded", strings.NewReader(HttpBuildQuery(request)))
+	log.Printf("resp:%v", resp)
 
 	if err != nil {
 		return response, err
