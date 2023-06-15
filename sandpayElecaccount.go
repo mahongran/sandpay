@@ -65,7 +65,8 @@ func (sandPay *SandPay) BackendRechargeOrderPlacement(params elecaccountParams.B
 	body.PayTool = params.PayTool
 	body.PayExtend = params.PayExtend
 	body.WalletAmt = params.WalletAmt
-	body.Extend = params.Extend
+	//!!!此参数不可传 传了资金操作确认接口会报错!!!
+	//body.Extend = params.Extend
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.third.payment.deposit", DataByte)
