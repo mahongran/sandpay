@@ -1,6 +1,10 @@
 package request
 
 type OrderPayBody struct {
+	//账户金额
+	AccountAmt string `json:"accountAmt"`
+	//云账户用户唯一id
+	MasterAccount string `json:"masterAccount"`
 	//商户订单号
 	OrderCode string `json:"orderCode"`
 	//2. 订单金额

@@ -19,6 +19,43 @@ type SandPay struct {
 	Config pay.Config
 }
 
+// CloudAccCreateOrder 云账户下单
+func (sandPay *SandPay) CloudAccCreateOrder(params params.OrderPayParams) (resp response.OrderPayResponse, err error) {
+	config := sandPay.Config
+	timeString := time.Now().Format("20060102150405")
+
+	header := request.Header{}
+	header.SetMethod(`sandPay.cloud.acc.pay.createOrder`).SetVersion(`1.0`).SetAccessType("1")
+	header.SetChannelType("07").SetMid(config.MerId).SetProductId("00002046").SetReqTime(timeString)
+	body := request.OrderPayBody{
+		PayTool:       "0409",
+		MasterAccount: params.MasterAccount,
+		AccountAmt:    params.GetTotalAmountToString(),
+		OrderCode:     params.OrderNo,
+		TotalAmount:   params.GetTotalAmountToString(),
+		Subject:       params.Subject,
+		Body:          params.Body,
+		TxnTimeOut:    params.TxnTimeOut,
+		PayMode:       params.PayMode,
+		PayExtra:      params.PayExtra.ToJson(),
+		ClientIp:      params.ClientIp,
+		NotifyUrl:     sandPay.Config.NotifyUrl,
+		FrontUrl:      sandPay.Config.FrontUrl,
+		Extends:       params.Extends,
+	}
+
+	signDataJsonString := pay.GenerateSignString(body, header)
+	sign, _ := pay.PrivateSha1SignData(signDataJsonString)
+	postData := pay.GeneratePostData(signDataJsonString, sign)
+
+	data, err := pay.PayPost(config.ApiHost+"/gw/cloudAcc/createOrder", postData)
+	if err != nil {
+		return
+	}
+	resp.SetData(data.Data)
+	return resp, err
+}
+
 // 微信统一下单接口
 func (sandPay *SandPay) OrderPayWx(params params.OrderPayParams) (resp response.OrderPayResponse, err error) {
 	config := sandPay.Config

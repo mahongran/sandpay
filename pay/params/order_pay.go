@@ -7,8 +7,10 @@ import (
 
 const PayModWeiXinMp = "sand_wx"
 
-//支付参数定义
+// OrderPayParams 支付参数定义
 type OrderPayParams struct {
+	//云账户用户唯一id
+	MasterAccount string `json:"masterAccount"`
 	// 用户id
 	UserId string `json:"userId,omitempty"`
 	// 商户上送的订单时间
