@@ -112,7 +112,6 @@ func PayPostNew(requrl string, request map[string]string) (resp *http.Response, 
 func PayPost(requrl string, request map[string]string) (response response.Response, err error) {
 	http := TimeoutClient()
 	resp, err := http.Post(requrl, "application/x-www-form-urlencoded", strings.NewReader(HttpBuildQuery(request)))
-	log.Printf("resp:%v", resp)
 
 	if err != nil {
 		return response, err
@@ -123,6 +122,8 @@ func PayPost(requrl string, request map[string]string) (response response.Respon
 	defer resp.Body.Close()
 	data, err := ioutil.ReadAll(resp.Body)
 	dataString, _ := url.QueryUnescape(string(data[:]))
+
+	log.Printf("resp:%v , resp string %v", data, dataString)
 
 	if err != nil {
 		return response, err
