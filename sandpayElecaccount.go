@@ -14,6 +14,39 @@ import (
 	"time"
 )
 
+// WithdrawApply 提现申请接口
+func (sandPay *SandPay) WithdrawApply(params elecaccountParams.WithdrawApplyParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.WithdrawApplyRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	body.AccountType = params.AccountType
+	body.OrderAmt = params.OrderAmt
+	body.UserFeeAmt = params.UserFeeAmt
+	body.RelatedCardNo = params.RelatedCardNo
+	body.NotifyUrl = params.NotifyUrl
+	body.FrontUrl = params.FrontUrl
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.withdraw.apply", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // FundOperationConfirmation 资金操作确认
 func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundOperationConfirmationParams) (string, error) {
 	config := sandPay.Config

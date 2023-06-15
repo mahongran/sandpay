@@ -7,6 +7,20 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// WithdrawApplyParams 提现申请
+type WithdrawApplyParams struct {
+	CustomerOrderNo string `json:"customerOrderNo"` //商户号下每次请求的唯一流水号
+	BizUserNo       string `json:"bizUserNo"`       //用户在商户系统中的唯一编号
+	NotifyUrl       string `json:"notifyUrl"`
+	FrontUrl        string `json:"frontUrl"` //前台通知地址
+	ApiHost         string `json:"apiHost"`  //请求api地址
+
+	AccountType   string `json:"accountType"`   //账户类型
+	OrderAmt      string `json:"orderAmt"`      //订单金额
+	RelatedCardNo string `json:"relatedCardNo"` //关联卡编号
+	UserFeeAmt    string `json:"userFeeAmt"`    //用户服务费
+}
+
 // FundOperationConfirmationParams 收款资金确认
 type FundOperationConfirmationParams struct {
 	CustomerOrderNo    string `json:"customerOrderNo"`    //商户号下每次请求的唯一流水号

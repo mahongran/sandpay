@@ -13,6 +13,19 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// WithdrawApplyRequest 提现申请
+type WithdrawApplyRequest struct {
+	CloudAccountCommon
+	BizUserNo     string `json:"bizUserNo"`     //用户在商户系统中的唯一编号
+	ApiHost       string `json:"apiHost"`       //请求api地址
+	AccountType   string `json:"accountType"`   //账户类型
+	OrderAmt      string `json:"orderAmt"`      //订单金额
+	RelatedCardNo string `json:"relatedCardNo"` //关联卡编号
+	UserFeeAmt    string `json:"userFeeAmt"`    //用户服务费
+	NotifyUrl     string `json:"notifyUrl"`     //异步通知地址
+	FrontUrl      string `json:"frontUrl"`      //前台通知地址
+}
+
 // FundOperationConfirmationRequest 收款资金确认
 type FundOperationConfirmationRequest struct {
 	CloudAccountCommon
