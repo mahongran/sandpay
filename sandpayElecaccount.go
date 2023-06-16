@@ -26,7 +26,7 @@ func (sandPay *SandPay) AccountOpeningInformationQuery(params elecaccountParams.
 	body.CustomerOrderNo = params.CustomerOrderNo
 	body.BizUserNo = params.BizUserNo
 	DataByte := AddSignature(body)
-	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.member.info.query", DataByte)
+	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.member.info.query", DataByte)
 	if err != nil {
 		return "", err
 	}
