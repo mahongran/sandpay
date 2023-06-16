@@ -7,6 +7,13 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// AccountOpeningInformationQueryParams 开户信息查询
+type AccountOpeningInformationQueryParams struct {
+	CustomerOrderNo string `json:"customerOrderNo"` //商户号下每次请求的唯一流水号
+	BizUserNo       string `json:"bizUserNo"`       //用户在商户系统中的唯一编号
+	ApiHost         string `json:"apiHost"`         //请求api地址
+}
+
 // WithdrawApplyParams 提现申请
 type WithdrawApplyParams struct {
 	CustomerOrderNo string `json:"customerOrderNo"` //商户号下每次请求的唯一流水号

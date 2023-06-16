@@ -13,6 +13,12 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// AccountOpeningInformationQueryRequest 开户信息查询
+type AccountOpeningInformationQueryRequest struct {
+	CloudAccountCommon
+	BizUserNo string `json:"bizUserNo"` //用户在商户系统中的唯一编号
+}
+
 // WithdrawApplyRequest 提现申请
 type WithdrawApplyRequest struct {
 	CloudAccountCommon

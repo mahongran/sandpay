@@ -14,6 +14,33 @@ import (
 	"time"
 )
 
+// AccountOpeningInformationQuery 开户信息查询
+func (sandPay *SandPay) AccountOpeningInformationQuery(params elecaccountParams.AccountOpeningInformationQueryParams) (string, error) {
+	config := sandPay.Config
+	var body elecaccountRequest.AccountOpeningInformationQueryRequest
+	body.Mid = config.MerId
+	body.SignType = "SHA1WithRSA"
+	body.EncryptType = "AES"
+	body.Version = "1.0.0"
+	body.Timestamp = time.Now().Format("2006-01-02 15:04:05")
+	body.CustomerOrderNo = params.CustomerOrderNo
+	body.BizUserNo = params.BizUserNo
+	DataByte := AddSignature(body)
+	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.member.info.query", DataByte)
+	if err != nil {
+		return "", err
+	}
+	d := make(map[string]interface{})
+	if err := json.Unmarshal(resp, &d); err != nil {
+		return "", err
+	}
+	j, err := pay.CloudAccountVerification(d)
+	if err != nil {
+		return "", err
+	}
+	return j, nil
+}
+
 // WithdrawApply 提现申请接口
 func (sandPay *SandPay) WithdrawApply(params elecaccountParams.WithdrawApplyParams) (string, error) {
 	config := sandPay.Config
