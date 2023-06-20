@@ -7,6 +7,19 @@ const (
 	MemberAccountOpening    = "00000001" //会员开户-协议签约
 )
 
+// AccountChangeDetailsQueryParams 开户信息查询
+type AccountChangeDetailsQueryParams struct {
+	CustomerOrderNo string `json:"customerOrderNo"` // 商户号下每次请求的唯一流水号
+	BizUserNo       string `json:"bizUserNo"`       // 用户在商户系统中的唯一编号
+	ApiHost         string `json:"apiHost"`         // 请求api地址
+	AccountType     string `json:"accountType"`     // 01：支付电子户
+	BeginDate       string `json:"beginDate"`       // 起始日期至结束日期最大不超过7日
+	EndDate         string `json:"endDate"`         // 起始日期至结束日期最大不超过7日
+	IoFlag          string `json:"IoFlag"`          // 00：全部
+	PageNo          string `json:"pageNo"`          // 必须从1开始
+	PageSize        string `json:"pageSize"`        // 每页条数
+}
+
 // AccountOpeningInformationQueryParams 开户信息查询
 type AccountOpeningInformationQueryParams struct {
 	CustomerOrderNo string `json:"customerOrderNo"` //商户号下每次请求的唯一流水号

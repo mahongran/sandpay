@@ -13,6 +13,18 @@ type CloudAccountCommon struct {
 	Data            string `json:"data"`            //报文体
 }
 
+// AccountChangeDetailsQueryRequest 交易记录
+type AccountChangeDetailsQueryRequest struct {
+	CloudAccountCommon
+	BizUserNo   string `json:"bizUserNo"`   //用户在商户系统中的唯一编号
+	AccountType string `json:"accountType"` // 01：支付电子户
+	BeginDate   string `json:"beginDate"`   // 起始日期至结束日期最大不超过7日
+	EndDate     string `json:"endDate"`     // 起始日期至结束日期最大不超过7日
+	IoFlag      string `json:"IoFlag"`      // 00：全部
+	PageNo      string `json:"pageNo"`      // 必须从1开始
+	PageSize    string `json:"pageSize"`    // 每页条数
+}
+
 // AccountOpeningInformationQueryRequest 开户信息查询
 type AccountOpeningInformationQueryRequest struct {
 	CloudAccountCommon
