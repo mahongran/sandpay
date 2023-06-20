@@ -33,10 +33,6 @@ func (sandPay *SandPay) AccountChangeDetailsQuery(params elecaccountParams.Accou
 	body.PageSize = params.PageSize
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.acc.change.details", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -47,6 +43,11 @@ func (sandPay *SandPay) AccountChangeDetailsQuery(params elecaccountParams.Accou
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -64,10 +65,6 @@ func (sandPay *SandPay) AccountOpeningInformationQuery(params elecaccountParams.
 	body.BizUserNo = params.BizUserNo
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.member.info.query", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -78,6 +75,11 @@ func (sandPay *SandPay) AccountOpeningInformationQuery(params elecaccountParams.
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -101,10 +103,6 @@ func (sandPay *SandPay) WithdrawApply(params elecaccountParams.WithdrawApplyPara
 	body.FrontUrl = params.FrontUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.withdraw.apply", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -115,6 +113,11 @@ func (sandPay *SandPay) WithdrawApply(params elecaccountParams.WithdrawApplyPara
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -135,10 +138,6 @@ func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundO
 	body.SmsCode = params.SmsCode
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.order.confirm", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -149,6 +148,11 @@ func (sandPay *SandPay) FundOperationConfirmation(params elecaccountParams.FundO
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -176,10 +180,6 @@ func (sandPay *SandPay) BackendRechargeOrderPlacement(params elecaccountParams.B
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.third.payment.deposit", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -190,6 +190,11 @@ func (sandPay *SandPay) BackendRechargeOrderPlacement(params elecaccountParams.B
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -208,10 +213,6 @@ func (sandPay *SandPay) BalanceQuery(params elecaccountParams.BalanceQueryParams
 	body.AccountType = params.AccountType
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.balance.query", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -222,6 +223,11 @@ func (sandPay *SandPay) BalanceQuery(params elecaccountParams.BalanceQueryParams
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -244,10 +250,6 @@ func (sandPay *SandPay) PasswordManagement(params elecaccountParams.PasswordMana
 	body.FrontUrl = params.FrontUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.pay.password.manage", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -258,6 +260,11 @@ func (sandPay *SandPay) PasswordManagement(params elecaccountParams.PasswordMana
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -277,10 +284,6 @@ func (sandPay *SandPay) UnbindAssociatedCards(params elecaccountParams.UnbindAss
 	body.NotifyUrl = params.NotifyUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.unbind.card", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -291,6 +294,11 @@ func (sandPay *SandPay) UnbindAssociatedCards(params elecaccountParams.UnbindAss
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -311,10 +319,6 @@ func (sandPay *SandPay) SetAssociatedBankCardConfirm(params elecaccountParams.Se
 	body.NotifyUrl = params.NotifyUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.bind.card.confirm", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -325,6 +329,11 @@ func (sandPay *SandPay) SetAssociatedBankCardConfirm(params elecaccountParams.Se
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -347,10 +356,6 @@ func (sandPay *SandPay) SetAssociatedBankCard(params elecaccountParams.SetAssoci
 	body.FrontUrl = params.FrontUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.bind.card", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -361,6 +366,11 @@ func (sandPay *SandPay) SetAssociatedBankCard(params elecaccountParams.SetAssoci
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -381,10 +391,6 @@ func (sandPay *SandPay) AssociatedCardQuery(params elecaccountParams.AssociatedC
 	body.FrontUrl = params.FrontUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.bind.card.query", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -395,6 +401,11 @@ func (sandPay *SandPay) AssociatedCardQuery(params elecaccountParams.AssociatedC
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -414,10 +425,6 @@ func (sandPay *SandPay) IsSetPayPassword(params elecaccountParams.IsSetPayPasswo
 	body.FrontUrl = params.FrontUrl
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.pay.password.query", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -428,6 +435,11 @@ func (sandPay *SandPay) IsSetPayPassword(params elecaccountParams.IsSetPayPasswo
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -453,10 +465,6 @@ func (sandPay *SandPay) WithdrawalApplication(params elecaccountParams.Withdrawa
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.trans.withdraw.apply", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -468,6 +476,11 @@ func (sandPay *SandPay) WithdrawalApplication(params elecaccountParams.Withdrawa
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -491,10 +504,6 @@ func (sandPay *SandPay) AgreementSigning(params elecaccountParams.AgreementSigni
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.sign", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -506,6 +515,11 @@ func (sandPay *SandPay) AgreementSigning(params elecaccountParams.AgreementSigni
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -536,10 +550,6 @@ func (sandPay *SandPay) BindCardToOpenAnAccount(params elecaccountParams.BindCar
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.quick.bindcard.open", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -551,6 +561,11 @@ func (sandPay *SandPay) BindCardToOpenAnAccount(params elecaccountParams.BindCar
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -582,10 +597,6 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.protocol.open", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -597,6 +608,11 @@ func (sandPay *SandPay) OneClickAccountOpening(params elecaccountParams.OneClick
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -620,10 +636,6 @@ func (sandPay *SandPay) CloudAccountCancellationConfirm(params elecaccountParams
 
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.member.modify.confirm", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -634,6 +646,11 @@ func (sandPay *SandPay) CloudAccountCancellationConfirm(params elecaccountParams
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -657,10 +674,6 @@ func (sandPay *SandPay) CloudAccountCancellation(params elecaccountParams.CloudA
 
 	DataByte := AddSignature(body)
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.account.member.status.modify", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -671,6 +684,11 @@ func (sandPay *SandPay) CloudAccountCancellation(params elecaccountParams.CloudA
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -690,10 +708,6 @@ func (sandPay *SandPay) CloudAccountUserInfo(params elecaccountParams.CloudAccou
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/elecaccount/ceas.elec.member.status.query", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -704,6 +718,11 @@ func (sandPay *SandPay) CloudAccountUserInfo(params elecaccountParams.CloudAccou
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
@@ -732,10 +751,6 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	DataByte := AddSignature(body)
 
 	resp, err := util.Do(params.ApiHost+"/v4/electrans/ceas.elec.trans.corp.transfer", DataByte)
-	if config.IsOpenLog {
-		log.Printf("请求参数：%v", DataByte)
-		log.Printf("返回参数：%v", string(resp))
-	}
 	if err != nil {
 		return "", err
 	}
@@ -747,6 +762,11 @@ func (sandPay *SandPay) CloudAccountTransfer(params elecaccountParams.CloudAccou
 	j, err := pay.CloudAccountVerification(d)
 	if err != nil {
 		return "", err
+	}
+	if config.IsOpenLog {
+		log.Printf("请求参数：%v", DataByte)
+		log.Printf("返回参数：%v", string(resp))
+		log.Printf("解密参数：%v", j)
 	}
 	return j, nil
 }
