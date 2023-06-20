@@ -61,8 +61,8 @@ type Config struct {
 	// 杉德pro公钥
 	ProEncryptCertPath string
 	//API 网关地址
-	ApiHost string
-
+	ApiHost   string
+	IsOpenLog bool
 	NotifyUrl string
 }
 
